@@ -17,9 +17,10 @@ jobs:
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
-          node-version: '14' # Corrected to use the correct Node.js version
+          node-version: '20' # Corrected to use the correct Node.js version
 
       - name: Install and Build
         run: |
           npm ci
+          npm test
           npm run build
