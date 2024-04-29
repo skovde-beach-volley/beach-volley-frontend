@@ -41,7 +41,7 @@ jobs:
           SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
         run: |
           ssh-agent -a $SSH_AUTH_SOCK > /dev/null
-          echo "$SSH_PRIVATE_KEY" | tr -d '\r' | ssh-add - >/dev/null
+          echo "$SSH_PRIVATE_KEY" | tr -d '\r' | (ssh-add - > /dev/null && echo "$SSH_PASSPHRASE")  # Provide passphrase programmatically
 
       - name: Deploy to Web Server
         run: |
