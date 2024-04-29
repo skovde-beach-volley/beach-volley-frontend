@@ -47,4 +47,4 @@ jobs:
       - name: Deploy to Web Server
         run: |
           echo $USERNAME $HOST
-          scp -r $GITHUB_WORKSPACE/dist/* $USERNAME@$HOST:/home/$USERNAME/public_html
+          scp -o StrictHostKeyChecking=no -r $GITHUB_WORKSPACE/dist/* $USERNAME@$HOST:/home/$USERNAME/public_html
