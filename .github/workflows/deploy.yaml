@@ -41,5 +41,10 @@ jobs:
           SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
         run: |
           ssh-agent -a $SSH_AUTH_SOCK > /dev/null
-          echo "echo $SSH_PASSPHRASE" > ~/.ssh_askpass && chmod +x ~/.ssh_askpass
-          echo "$SSH_PRIVATE_KEY" | tr 
+          echo "$SSH_PRIVATE_KEY" | tr -d '\r' | ssh-add - >/dev/null
+
+      - name: Deploy to Web Server
+        run: |
+          cd ~/public_html
+          rm -rf dist
+          scp -r $GITHUB_WORKSPACE/dist/* .
