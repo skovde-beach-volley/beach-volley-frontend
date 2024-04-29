@@ -25,6 +25,12 @@ jobs:
           npm ci
           npm run build
 
+      - name: Archive Build Artifacts
+        uses: actions/upload-artifact@v2
+        with:
+          name: dist
+          path: $GITHUB_WORKSPACE/beach-volley-frontend/dist
+
   deploy:
     name: Deploy
     needs: build
@@ -48,4 +54,4 @@ jobs:
         run: |
           cd ..
           ls -al
-          scp -o StrictHostKeyChecking=no -r $GITHUB_WORKSPACE/dist/* $USERNAME@$HOST:/home/$USERNAME/public_html
+          scp -o StrictHostKeyChecking=no -r $GITHUB_WORKSPACE/beach-volley-frontend/dist/* $USERNAME@$HOST:/home/$USERNAME/public_html
