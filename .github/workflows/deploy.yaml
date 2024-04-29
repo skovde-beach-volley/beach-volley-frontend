@@ -46,6 +46,4 @@ jobs:
 
       - name: Deploy to Web Server
         run: |
-          cd ~/public_html
-          rm -rf dist
-          scp -r $GITHUB_WORKSPACE/dist/* .
+          scp -r $GITHUB_WORKSPACE/dist/* $USERNAME@$HOST:/home/$USERNAME/public_html
