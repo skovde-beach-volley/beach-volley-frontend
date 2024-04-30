@@ -52,6 +52,6 @@ jobs:
 
       - name: Deploy to Web Server
         run: |
-          cd ..
+          pwd
           ls -al
           scp -o StrictHostKeyChecking=no -r $GITHUB_WORKSPACE/beach-volley-frontend/dist/* $USERNAME@$HOST:/home/$USERNAME/public_html
