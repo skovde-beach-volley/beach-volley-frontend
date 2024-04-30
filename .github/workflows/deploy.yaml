@@ -20,31 +20,14 @@ jobs:
         with:
           node-version: '20'
 
-      # Step to restore npm dependencies cache
-      - name: Restore npm Dependencies Cache
-        uses: actions/cache@v2
-        with:
-          path: ~/.npm
-          key: ${{ runner.os }}-npm-${{ hashFiles('**/package-lock.json') }}
-          restore-keys: |
-            ${{ runner.os }}-npm-
-
-      - name: Install Dependencies
-        run: npm ci
-
-      # Step to cache npm dependencies
       - name: Cache npm Dependencies
         uses: actions/cache@v2
         with:
           path: ~/.npm
           key: ${{ runner.os }}-npm-${{ hashFiles('**/package-lock.json') }}
 
-      # Step to cache build artifacts
-      - name: Cache Build Artifacts
-        uses: actions/cache@v2
-        with:
-          path: dist
-          key: ${{ runner.os }}-dist-${{ hashFiles('dist/**') }}
+      - name: Install Dependencies
+        run: npm ci
           
       - name: Build
         run: npm run build
@@ -65,14 +48,10 @@ jobs:
       HOST: ${{ secrets.SERVER_HOST }}
 
     steps:
-      - name: Setup SSH with a passphrase
-        env:
-          SSH_PASSPHRASE: ${{ secrets.SSH_PASSPHRASE }}
-          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
-        run: |
-          ssh-agent -a $SSH_AUTH_SOCK > /dev/null
-          echo "echo $SSH_PASSPHRASE" > ~/.ssh_askpass && chmod +x ~/.ssh_askpass
-          echo "$SSH_PRIVATE_KEY" | tr -d '\r' | DISPLAY=None SSH_ASKPASS=~/.ssh_askpass ssh-add - >/dev/null
+      - name: Setup SSH Agent
+        uses: webfactory/ssh-agent@v0.5.4
+        with:
+          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
           
       - name: Download build artifacts
         uses: actions/download-artifact@v2
@@ -80,7 +59,4 @@ jobs:
           name: dist
       
       - name: Deploy to Web Server
-        run: |
-          pwd
-          ls -al
-          scp -o StrictHostKeyChecking=no -r $GITHUB_WORKSPACE/* $USERNAME@$HOST:/home/$USERNAME/public_html
+        run: rsync -avz --delete -e "ssh -o StrictHostKeyChecking=accept-new" ./dist/ ${{ secrets.SERVER_USERNAME }}@${{ secrets.SERVER_HOST }}:/home/${{ secrets.SERVER_USERNAME }}/public_html/
