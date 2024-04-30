@@ -59,4 +59,4 @@ jobs:
           name: dist
       
       - name: Deploy to Web Server
-        run: rsync -avz --delete -e "ssh -o StrictHostKeyChecking=accept-new" ./dist/ ${{ secrets.SERVER_USERNAME }}@${{ secrets.SERVER_HOST }}:/home/${{ secrets.SERVER_USERNAME }}/public_html/
+        run: rsync -avz --delete -e "ssh -o StrictHostKeyChecking=accept-new" $GITHUB_WORKSPACE/* ${{ secrets.SERVER_USERNAME }}@${{ secrets.SERVER_HOST }}:/home/${{ secrets.SERVER_USERNAME }}/public_html
