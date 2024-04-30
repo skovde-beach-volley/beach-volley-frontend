@@ -18,15 +18,36 @@ jobs:
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
-          node-version: '20' # Corrected to use the correct Node.js version
+          node-version: '20'
 
-      - name: Install and Build
-        run: |
-          npm ci
-          npm run build
-          pwd
-          ls -al
-          echo $GITHUB_WORKSPACE
+      # Step to restore npm dependencies cache
+      - name: Restore npm Dependencies Cache
+        uses: actions/cache@v2
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-npm-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-npm-
+
+      - name: Install Dependencies
+        run: npm ci
+
+      # Step to cache npm dependencies
+      - name: Cache npm Dependencies
+        uses: actions/cache@v2
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-npm-${{ hashFiles('**/package-lock.json') }}
+
+      # Step to cache build artifacts
+      - name: Cache Build Artifacts
+        uses: actions/cache@v2
+        with:
+          path: dist
+          key: ${{ runner.os }}-dist-${{ hashFiles('dist/**') }}
+          
+      - name: Build
+        run: npm run build
 
       - name: Archive Build Artifacts
         uses: actions/upload-artifact@v2
@@ -46,13 +67,13 @@ jobs:
     steps:
       - name: Setup SSH with a passphrase
         env:
-          SSH_PASSPHRASE: ${{secrets.SSH_PASSPHRASE}}
-          SSH_PRIVATE_KEY: ${{secrets.SSH_PRIVATE_KEY}}
+          SSH_PASSPHRASE: ${{ secrets.SSH_PASSPHRASE }}
+          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
         run: |
           ssh-agent -a $SSH_AUTH_SOCK > /dev/null
           echo "echo $SSH_PASSPHRASE" > ~/.ssh_askpass && chmod +x ~/.ssh_askpass
           echo "$SSH_PRIVATE_KEY" | tr -d '\r' | DISPLAY=None SSH_ASKPASS=~/.ssh_askpass ssh-add - >/dev/null
-
+          
       - name: Download build artifacts
         uses: actions/download-artifact@v2
         with:
