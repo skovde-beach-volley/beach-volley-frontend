@@ -16,6 +16,7 @@ import { RouterLink, RouterView } from 'vue-router'
       <p>På den här hemsidan kommer du kunna boka planer, betala medlemskap,</p>
 
       <p>se träningstider och träningsgrupper och läsa övrig info om föreningen</p>
+      <p> Detta har deployats automatiskt! </p>
   <img alt="under_construction" src="@/assets/beachvolley_under_construction.webp" width="1000" height="500" />
   </div>
   </body>
