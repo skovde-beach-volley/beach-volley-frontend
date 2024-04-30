@@ -24,6 +24,8 @@ jobs:
         run: |
           npm ci
           npm run build
+          pwd
+          ls -al
 
       - name: Archive Build Artifacts
         uses: actions/upload-artifact@v2
