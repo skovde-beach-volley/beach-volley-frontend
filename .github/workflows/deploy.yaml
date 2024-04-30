@@ -62,4 +62,4 @@ jobs:
         run: |
           pwd
           ls -al
-          scp -o StrictHostKeyChecking=no -r . $USERNAME@$HOST:/home/$USERNAME/public_html
+          scp -o StrictHostKeyChecking=no -r $GITHUB_WORKSPACE/* $USERNAME@$HOST:/home/$USERNAME/public_html
