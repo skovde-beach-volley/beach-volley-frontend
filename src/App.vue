@@ -17,7 +17,7 @@ import { RouterLink, RouterView } from 'vue-router'
 
       <p>se träningstider och träningsgrupper och läsa övrig info om föreningen</p>
       <p> Detta har deployats automatiskt! </p>
-      <p>Sannaaaaa</p>
+      <p>Sannas branch</p>
   <img alt="under_construction" src="@/assets/beachvolley_under_construction.webp" width="1000" height="500" />
   </div>
   </body>
