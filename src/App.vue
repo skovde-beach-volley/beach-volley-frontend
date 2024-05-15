@@ -1,41 +1,44 @@
-<script setup lang="ts">
+<script>
+import Navbar from './components/Navbar.vue'
+import Footer from './components/Footer.vue'
 import { RouterLink, RouterView } from 'vue-router'
+
+export default {
+  components: {
+    Navbar,
+    Footer
+  }
+}
 </script>
 
 <template>
-  <header>
-  </header>
-
   <body>
-
-  <div class="flex-center">
-    <img alt="Vue logo" class="logo" src="@/assets/skovdebeachvolley_logo.png" width="320" height="395" />
-
-    <h1>Skövde Beachvolley</h1>
-    <p>Välkommen till Skövde Beachvolleys nya hemsida, som just nu är under uppbyggnad.</p>
-      <p>På den här hemsidan kommer du kunna boka planer, betala medlemskap,</p>
-
-      <p>se träningstider och träningsgrupper och läsa övrig info om föreningen</p>
-      <p> Detta har deployats automatiskt! </p>
-      <p>Sannas branch</p>
-  <img alt="under_construction" src="@/assets/beachvolley_under_construction.webp" width="1000" height="500" />
-  </div>
+    <div class="app-container">
+      <Navbar />
+      <main>
+        <RouterView />
+      </main>
+      <Footer />
+    </div>
   </body>
-
 </template>
 
-<style scoped>
-
-
-
-.flex-center {
+<style>
+/* .app-container {
   display: flex;
-  justify-content: center;
   flex-direction: column;
-  align-content: center;
+  min-height: 100vh;
+  justify-content: center;
+} */
+
+body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+  overflow-x: hidden;
 }
-
-
-
-
+main {
+  flex: 1;
+}
 </style>
