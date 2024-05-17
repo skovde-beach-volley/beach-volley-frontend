@@ -17,6 +17,7 @@ export default {
       bookingName: '',
       bookingEmail: '',
       selectedBooking: null,
+      isEdting: false,
 
       calendarOptions: {
         plugins: [dayGridPlugin, timeGridPlugin, interactionPlugin],
@@ -39,10 +40,13 @@ export default {
         },
         initialView: 'dayGridMonth', // Börja med att visa som månadsvy
         dateClick: this.handleDateClick,
+        eventClick: this.handleEventClick,
         events: [
-          { title: 'event 1', date: '2019-04-01' },
+          { id: 'aaaaaa', title: 'event 1ggg', date: '2024-05-17' },
+          { id: '1', title: 'event 1ggg', date: '2024-05-17' },
           { title: 'event 2', date: '2019-04-02' }
         ],
+        initialEvents: this.events,
         headerToolbar: {
           left: 'prev,next today',
           center: 'title',
@@ -69,14 +73,24 @@ export default {
     },
 
     submitBooking() {
-      const newBooking = {
-        title: 'Bokning',
-        start: this.bookingDate + 'T' + this.bookingStartTime,
-        end: this.bookingDate + 'T' + this.bookingEndTime
+      if (this.isEditing) {
+        // Update the existing event
+        const event = this.calendarOptions.events.find((e) => e.id === this.selectedBooking.id)
+        if (event) {
+          event.start = this.bookingDate + 'T' + this.bookingStartTime
+          event.end = this.bookingDate + 'T' + this.bookingEndTime
+        }
+      } else {
+        // Create a new event
+        const newBooking = {
+          id: Date.now().toString(), // Generate a unique ID for the new event
+          title: 'Bokning',
+          start: this.bookingDate + 'T' + this.bookingStartTime,
+          end: this.bookingDate + 'T' + this.bookingEndTime
+        }
+        this.calendarOptions.events.push(newBooking)
       }
-
-      this.calendarOptions.events.push(newBooking)
-
+      // this.calendarOptions.events = [...this.events]
       this.$refs.fullcalendar.getApi().refetchEvents()
 
       this.bookingDate = ''
@@ -84,11 +98,50 @@ export default {
       this.bookingEndTime = ''
 
       this.closeBookingModal()
-    }
+    },
 
-    // handleDateClick: function (arg) {
-    //   alert('date click! ' + arg.dateStr)
-    // }
+    handleDateClick: function (arg) {
+      const endDate = new Date(arg.dateStr)
+      endDate.setHours(endDate.getHours() + 4)
+      const newEvent = {
+        id: Date.now().toString(), // Generate a unique ID for the new event
+        title: 'Bokning',
+        // start: this.bookingDate + 'T' + this.bookingStartTime,
+        // end: this.bookingDate + 'T' + this.bookingEndTime
+        start: new Date(arg.dateStr),
+        end: endDate
+      }
+      this.openBookingModal = true
+      this.calendarOptions.events.push(newEvent)
+      console.log('arg:', arg)
+      console.log(this.calendarOptions.events)
+
+      //alert('date click! ' + arg)
+    },
+    handleDeleteClick: function (arg) {
+      console.log('DeleteClick:', arg)
+      console.log(this.calendarOptions.events)
+      this.calendarOptions.events = this.calendarOptions.events.filter((event) => {
+        console.log('event', event)
+        event.id !== arg.event._def.publicId
+        return event.id !== arg.event._def.publicId
+      })
+      // this.calendarOptions.events = [...this.events]
+      this.$refs.fullcalendar.getApi().refetchEvents()
+    },
+
+    handleEventClick: function (arg) {
+      const event = arg.event
+      this.isEditing = true
+      this.selectedBooking = event
+      this.bookingDate = event.startStr.split('T')[0]
+      this.bookingStartTime = event.startStr.split('T')[1].substring(0, 5)
+      this.bookingEndTime = event.endStr.split('T')[1].substring(0, 5)
+      this.bookingName = event.title
+
+      this.openBookingModal = true
+      // this.handleDeleteClick(arg)
+    }
   }
 }
 </script>
@@ -96,11 +149,10 @@ export default {
 <template>
   <button @click="showModal">Boka tid</button>
 
-  <!-- Modal for booking -->
   <div v-if="openBookingModal" class="modal">
     <div class="modal-content">
       <span class="close" @click="closeBookingModal">&times;</span>
-      <!-- <h2>Boka tid</h2> -->
+
       <form @submit.prevent="submitBooking">
         <div class="booking-container">
           <div class="modal-label">
@@ -150,7 +202,7 @@ export default {
       </form>
     </div>
   </div>
-  <FullCalendar :options="calendarOptions" />
+  <FullCalendar ref="fullcalendar" :options="calendarOptions" />
 </template>
 
 <style scoped>
@@ -163,8 +215,8 @@ export default {
   width: 100%;
   height: 100%;
   overflow: auto;
-  background-color: rgba(0, 0, 0, 0.4); /* Bakgrundsfärg med genomskinlighet */
-  pointer-events: none; /* Tillåter inte klickhändelser på bakgrunden */
+  background-color: rgba(0, 0, 0, 0.4);
+  pointer-events: none;
 }
 
 .modal-content {
@@ -173,7 +225,7 @@ export default {
   padding: 20px;
   border: 1px solid #888;
   width: 80%;
-  pointer-events: auto; /* Tillåter klickhändelser på modalfönstrets innehåll */
+  pointer-events: auto;
 }
 
 .close {
