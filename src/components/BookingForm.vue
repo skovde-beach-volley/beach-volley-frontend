@@ -8,6 +8,19 @@ export default {
   components: {
     FullCalendar // make the <FullCalendar> tag available
   },
+  created() {
+    const savedBookings = localStorage.getItem('bookings')
+    if (savedBookings) {
+      this.calendarOptions.events = JSON.parse(savedBookings)
+    }
+    // this.calendarOptions.eventContent = function (arg) {
+    //   if (arg.event.extendedProps.booker === 'sanna.asp@hotmail.com') {
+    //     return { backgroundColor: 'green', borderColor: 'green', color: 'white' }
+    //   } else {
+    //     return { backgroundColor: 'blue', borderColor: 'blue', color: 'white' }
+    //   }
+    // }.bind(this)
+  },
   data() {
     return {
       openBookingModal: false,
@@ -20,6 +33,7 @@ export default {
       selectedBooking: null,
       isEditing: false,
       deleteMessage: '',
+      bookingCounts: {},
 
       calendarOptions: {
         plugins: [dayGridPlugin, timeGridPlugin, interactionPlugin],
@@ -76,47 +90,54 @@ export default {
     },
 
     submitBooking() {
-      if (this.selectedBooking !== null) {
-        // Update the existing event
-        const event = this.calendarOptions.events.find((e) => e.id === this.selectedBooking.id)
-        if (event) {
-          event.start = this.bookingDate + 'T' + this.bookingStartTime
-          event.end = this.bookingDate + 'T' + this.bookingEndTime
-        }
-      } else {
-        // Create a new event
-        const newBooking = {
-          id: Date.now().toString(), // Generate a unique ID for the new event
-          title: 'Bokning',
-          start: this.bookingDate + 'T' + this.bookingStartTime,
-          end: this.bookingDate + 'T' + this.bookingEndTime
-        }
-        this.calendarOptions.events.push(newBooking)
+      const maxBookingsPerPerson = 2
+      const person = this.bookingEmail
+
+      const conflictingBooking = this.calendarOptions.events.find((event) => {
+        const eventStartTime = new Date(event.start)
+        const eventEndTime = new Date(event.end)
+        const bookingStartTime = new Date(this.bookingDate + 'T' + this.bookingStartTime)
+        const bookingEndTime = new Date(this.bookingDate + 'T' + this.bookingEndTime)
+
+        return eventStartTime <= bookingEndTime && eventEndTime >= bookingStartTime
+      })
+      if (conflictingBooking) {
+        alert('Det finns redan en bokning för den valda tiden.')
+        return
       }
 
-      // this.resetBookingData(false)
-      this.$refs.fullcalendar.getApi().refetchEvents()
+      if (this.bookingCounts[person] && this.bookingCounts[person] >= maxBookingsPerPerson) {
+        alert('Du får inte göra fler än två bokningar!')
+        return
+      }
 
-      this.bookingDate = ''
-      this.bookingStartTime = ''
-      this.bookingEndTime = ''
+      if (this.bookingDate && this.bookingStartTime && this.bookingEndTime) {
+        if (this.selectedBooking !== null) {
+          const event = this.calendarOptions.events.find((e) => e.id === this.selectedBooking.id)
+          if (event) {
+            event.start = this.bookingDate + 'T' + this.bookingStartTime
+            event.end = this.bookingDate + 'T' + this.bookingEndTime
+          }
+        } else {
+          const newBooking = {
+            id: Date.now().toString(), // Generate a unique ID for the new event
+            title: 'Bokning',
+            start: this.bookingDate + 'T' + this.bookingStartTime,
+            end: this.bookingDate + 'T' + this.bookingEndTime
+          }
+          this.calendarOptions.events.push(newBooking)
+          localStorage.setItem('bookings', JSON.stringify(this.calendarOptions.events))
+        }
+        this.bookingCounts[person] = (this.bookingCounts[person] || 0) + 1
+        this.$refs.fullcalendar.getApi().refetchEvents()
 
-      this.closeBookingModal()
+        this.bookingDate = ''
+        this.bookingStartTime = ''
+        this.bookingEndTime = ''
+        this.closeBookingModal()
+      }
+      return eventStartTime <= bookingEndTime && eventEndTime >= bookingStartTime
     },
-
-    // resetBookingData: function (resetNameAndEmail = true) {
-    //   // Återställ alla datafält till sina ursprungliga värden
-    //   this.bookingDate = ''
-    //   this.bookingStartTime = ''
-    //   this.bookingEndTime = ''
-    //   if (resetNameAndEmail) {
-    //     this.bookingName = ''
-    //     this.bookingEmail = ''
-    //   }
-    //   this.selectedBooking = null
-    //   this.isEditing = false
-    //   this.deleteMessage = ''
-    // },
 
     handleDateClick: function (arg) {
       const endDate = new Date(arg.dateStr)
@@ -130,13 +151,22 @@ export default {
         end: endDate
       }
       this.openBookingModal = true
-      this.calendarOptions.events.push(newEvent)
+      this.bookingDate = new Date(arg.dateStr).toISOString().split('T')[0]
+      this.bookingStartTime = new Date(arg.dateStr).toISOString().split('T')[1].substring(0, 5)
+      this.bookingEndTime = new Date(endDate).toISOString().split('T')[1].substring(0, 5)
+      // this.calendarOptions.events.push(newEvent)
       console.log('arg:', arg)
       console.log(this.calendarOptions.events)
     },
 
     handleDeleteClick: function (arg) {
       if (this.selectedBooking) {
+        const savedBookings = localStorage.getItem('bookings')
+        if (savedBookings) {
+          const bookings = JSON.parse(savedBookings)
+          const updatedBookings = bookings.filter((event) => event.id !== this.selectedBooking.id)
+          localStorage.setItem('bookings', JSON.stringify(updatedBookings))
+        }
         this.calendarOptions.events = this.calendarOptions.events.filter((event) => {
           console.log('event', event)
           // event.id !== arg.event._def.publicId
@@ -154,7 +184,6 @@ export default {
     editBooking: function () {
       this.closeBookingInfoModal()
       this.isEditing = false
-      // this.resetBookingData()
       this.openBookingModal = true
     },
 
@@ -228,7 +257,7 @@ export default {
           </div>
           <div class="modal-label">
             <label>Mail-adress</label>
-            <input type="email" id="booking-email" required />
+            <input type="email" id="booking-email" v-model="bookingEmail" required />
           </div>
         </div>
         <div class="booking-button">
