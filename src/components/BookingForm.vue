@@ -11,13 +11,15 @@ export default {
   data() {
     return {
       openBookingModal: false,
+      openBookingInfoModal: false,
       bookingDate: '',
       bookingStartTime: '',
       bookingEndTime: '',
       bookingName: '',
       bookingEmail: '',
       selectedBooking: null,
-      isEdting: false,
+      isEditing: false,
+      deleteMessage: '',
 
       calendarOptions: {
         plugins: [dayGridPlugin, timeGridPlugin, interactionPlugin],
@@ -65,6 +67,7 @@ export default {
   methods: {
     showModal: function () {
       this.openBookingModal = true
+      this.deleteMessage = ''
       console.log(this.openBookingModal)
     },
 
@@ -73,7 +76,7 @@ export default {
     },
 
     submitBooking() {
-      if (this.isEditing) {
+      if (this.selectedBooking !== null) {
         // Update the existing event
         const event = this.calendarOptions.events.find((e) => e.id === this.selectedBooking.id)
         if (event) {
@@ -90,7 +93,8 @@ export default {
         }
         this.calendarOptions.events.push(newBooking)
       }
-      // this.calendarOptions.events = [...this.events]
+
+      // this.resetBookingData(false)
       this.$refs.fullcalendar.getApi().refetchEvents()
 
       this.bookingDate = ''
@@ -99,6 +103,20 @@ export default {
 
       this.closeBookingModal()
     },
+
+    // resetBookingData: function (resetNameAndEmail = true) {
+    //   // Återställ alla datafält till sina ursprungliga värden
+    //   this.bookingDate = ''
+    //   this.bookingStartTime = ''
+    //   this.bookingEndTime = ''
+    //   if (resetNameAndEmail) {
+    //     this.bookingName = ''
+    //     this.bookingEmail = ''
+    //   }
+    //   this.selectedBooking = null
+    //   this.isEditing = false
+    //   this.deleteMessage = ''
+    // },
 
     handleDateClick: function (arg) {
       const endDate = new Date(arg.dateStr)
@@ -115,19 +133,29 @@ export default {
       this.calendarOptions.events.push(newEvent)
       console.log('arg:', arg)
       console.log(this.calendarOptions.events)
-
-      //alert('date click! ' + arg)
     },
+
     handleDeleteClick: function (arg) {
-      console.log('DeleteClick:', arg)
-      console.log(this.calendarOptions.events)
-      this.calendarOptions.events = this.calendarOptions.events.filter((event) => {
-        console.log('event', event)
-        event.id !== arg.event._def.publicId
-        return event.id !== arg.event._def.publicId
-      })
-      // this.calendarOptions.events = [...this.events]
-      this.$refs.fullcalendar.getApi().refetchEvents()
+      if (this.selectedBooking) {
+        this.calendarOptions.events = this.calendarOptions.events.filter((event) => {
+          console.log('event', event)
+          // event.id !== arg.event._def.publicId
+          // return event.id !== arg.event._def.publicId
+          return event.id !== this.selectedBooking.id
+        })
+        this.$refs.fullcalendar.getApi().refetchEvents()
+        this.closeBookingModal()
+        this.deleteMessage = 'Din bokning är raderad'
+      } else {
+        console.log('error')
+      }
+    },
+
+    editBooking: function () {
+      this.closeBookingInfoModal()
+      this.isEditing = false
+      // this.resetBookingData()
+      this.openBookingModal = true
     },
 
     handleEventClick: function (arg) {
@@ -137,10 +165,17 @@ export default {
       this.bookingDate = event.startStr.split('T')[0]
       this.bookingStartTime = event.startStr.split('T')[1].substring(0, 5)
       this.bookingEndTime = event.endStr.split('T')[1].substring(0, 5)
-      this.bookingName = event.title
+      this.bookingName = ''
+      this.openBookingInfoModal = true
+      this.bookingEmail = ''
 
-      this.openBookingModal = true
+      // this.openBookingModal = true
       // this.handleDeleteClick(arg)
+    },
+    closeBookingInfoModal: function () {
+      this.openBookingInfoModal = false
+      this.selectedBooking = null
+      this.deleteMessage = ''
     }
   }
 }
@@ -202,6 +237,22 @@ export default {
       </form>
     </div>
   </div>
+  <div v-if="openBookingInfoModal" class="modal">
+    <div class="modal-content">
+      <span class="close" @click="closeBookingInfoModal">&times;</span>
+      <div v-if="selectedBooking && !deleteMessage">
+        <h2>Här är din bokning</h2>
+        <p>Bokningens namn: {{ selectedBooking.title }}</p>
+        <p>Starttid: {{ selectedBooking.start.toLocaleString() }}</p>
+        <p>Sluttid: {{ selectedBooking.end.toLocaleString() }}</p>
+
+        <button @click="editBooking">Redigera bokning</button>
+        <button @click="handleDeleteClick">Radera bokning</button>
+      </div>
+      <div v-if="deleteMessage" class="deleteMessage">{{ deleteMessage }}</div>
+    </div>
+  </div>
+
   <FullCalendar ref="fullcalendar" :options="calendarOptions" />
 </template>
 
