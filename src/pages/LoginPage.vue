@@ -1,0 +1,126 @@
+<template>
+  <div class="login-box mt-20">
+    <div class="login-container">
+      <h2 class="text-4xl mb-10 text-left">Logga in</h2>
+      <input class="login-input" type="text" v-model="username" placeholder="Användarnamn" />
+      <input class="login-input" type="password" v-model="password" placeholder="Lösenord" />
+      <button
+        v-if="!isLoggedIn"
+        @click="login"
+        type="button"
+        class="text-white bg-gradient-to-r from-pink-400 via-pink-500 to-pink-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-pink-300 dark:focus:ring-pink-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2"
+      >
+        Logga in
+      </button>
+
+      <button
+        v-else
+        class="text-white bg-gradient-to-r from-pink-400 via-pink-500 to-pink-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-pink-300 dark:focus:ring-pink-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2"
+        @click="logout"
+      >
+        Logga ut
+      </button>
+      <!-- <button v-else class="login-button" @click="logout">Logga ut</button> -->
+      <p class="error-message" v-if="errorMessage">{{ errorMessage }}</p>
+      <span v-if="isLoggedIn && username">{{ userMessage }}</span>
+      <p v-else>Du är nu utloggad</p>
+    </div>
+  </div>
+</template>
+
+<script>
+import { ref, computed } from 'vue'
+import { useLoggedInStore } from '@/stores/loggedIn'
+
+export default {
+  name: 'LoginPage',
+  setup() {
+    const loggedInStore = useLoggedInStore()
+    const username = ref('')
+    const password = ref('')
+    const errorMessage = ref('')
+
+    const isLoggedIn = computed(() => loggedInStore.isLoggedIn)
+    const userMessage = computed(() => `Du är nu inloggad ${username.value}`)
+
+    const login = () => {
+      const account = { username: 'sanna.asp@hotmail.com', password: 'sannis' }
+      if (username.value !== account.username || password.value !== account.password) {
+        errorMessage.value = 'Felaktigt användarnamn eller lösenord'
+        loggedInStore.logOut()
+        return
+      }
+      loggedInStore.logIn(username.value)
+      errorMessage.value = ''
+      console.log('inloggad')
+    }
+
+    const logout = () => {
+      loggedInStore.logOut()
+      username.value = ''
+      password.value = ''
+      console.log('jag är utloggad')
+    }
+
+    return {
+      username,
+      password,
+      isLoggedIn,
+      userMessage,
+      login,
+      logout,
+      errorMessage
+    }
+  }
+}
+</script>
+
+<style scoped>
+.login-box {
+  display: flex;
+  justify-content: center;
+  /* background-image: linear-gradient(to right, #8bb8e2, #c143ae); */
+}
+/* Style för inloggningssidan */
+.login-container {
+  width: 300px;
+  height: 400px;
+  margin: 0 auto;
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  background-color: #f9f9f9;
+  margin-top: 30px;
+}
+.login-input {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 10px;
+  border: none;
+  border-bottom: 2px solid #ccc; /* Ändra till önskat tjocklek och färg */
+  background-color: transparent; /* Ta bort bakgrundsfärgen */
+  transition: border-bottom-color 0.3s; /* Lägg till en övergångseffekt för färgförändring */
+  outline: none; /* Ta bort fokusramen */
+}
+
+.login-input:focus {
+  border-bottom-color: #c143ae; /* Ändra färgen när inputfältet är i fokus */
+}
+.login-button {
+  width: 100%;
+  padding: 10px;
+  background-color: #c143ae;
+  color: #fff;
+  border: none;
+  border-radius: 3px;
+  cursor: pointer;
+}
+.login-button:hover {
+  background-color: #c143ae;
+}
+.error-message {
+  color: #ff0000;
+  margin-bottom: 10px;
+  text-align: center;
+}
+</style>

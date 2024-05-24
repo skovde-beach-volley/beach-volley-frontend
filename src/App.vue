@@ -1,12 +1,17 @@
 <script>
-import Navbar from './components/Navbar.vue'
+import NavBar from './components/NavBar.vue'
 import Footer from './components/Footer.vue'
 import { RouterLink, RouterView } from 'vue-router'
 
 export default {
   components: {
-    Navbar,
+    NavBar,
     Footer
+  },
+  data() {
+    return {
+      loggedIn: false // Ange den initiala inloggningsstatusen här
+    }
   }
 }
 </script>
@@ -14,7 +19,7 @@ export default {
 <template>
   <body>
     <div class="app-container">
-      <Navbar />
+      <NavBar :loggedIn="loggedIn" />
       <main>
         <RouterView />
       </main>
