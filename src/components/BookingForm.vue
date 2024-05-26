@@ -171,6 +171,7 @@ export default {
 
     handleEndClick(time, event) {
       event.target.style.backgroundColor = 'white'
+      this.selectedEndTime = time
       this.selectEndTime(time, event)
     },
 
@@ -183,6 +184,13 @@ export default {
 
     closeBookingModal: function () {
       this.openBookingModal = false
+      this.resetButtonStyles()
+      this.resetEditBooking()
+    },
+
+    resetButtonStyles() {
+      this.selectedStartTime = ''
+      this.selectedEndTime = ''
     },
 
     highlightBookedTimes() {
@@ -204,7 +212,6 @@ export default {
       console.log('Bookings', bookings)
       console.log('Username', username)
       bookings.forEach((booking) => {
-        console.log('EachBooking', booking)
         if (booking.bookerEmail == username) {
           console.log('match')
           booking.backgroundColor = 'green'
@@ -276,46 +283,47 @@ export default {
         return
       }
 
-      if (this.bookingDate && this.bookingStartTime && this.bookingEndTime) {
-        if (this.selectedBooking !== null) {
-          // Uppdatera befintlig bokning
-          const event = this.calendarOptions.events.find((e) => e.id === this.selectedBooking.id)
-          if (event) {
-            event.start = this.bookingDate + 'T' + this.bookingStartTime
-            event.end = this.bookingDate + 'T' + this.bookingEndTime
-            event.title = this.bookingName
-            event.bookerEmail = this.bookingEmail
-          }
-        } else {
-          // Skapa en ny bokning
-          const newBooking = {
-            id: Date.now().toString(), // Generate a unique ID for the new event
-            title: this.bookingName,
-            start: this.bookingDate + 'T' + this.bookingStartTime,
-            end: this.bookingDate + 'T' + this.bookingEndTime,
-            bookerEmail: this.bookingEmail
-          }
-          this.calendarOptions.events.push(newBooking)
-        }
+      // if (this.bookingDate && this.bookingStartTime && this.bookingEndTime) {
+      //   if (this.selectedBooking !== null) {
+      //     const event = this.calendarOptions.events.find((e) => e.id === this.selectedBooking.id)
+      //     console.log(':', event)
 
-        // Uppdatera lokala lagringen
-        localStorage.setItem('bookings', JSON.stringify(this.calendarOptions.events))
-
-        // Uppdatera bokningsräkning för personen
-        this.bookingCounts[person] = (this.bookingCounts[person] || 0) + 1
-
-        // Refresha kalendern
-        this.$refs.fullcalendar.getApi().refetchEvents()
-
-        // Återställ formulärfält
-        this.bookingDate = ''
-        this.bookingStartTime = ''
-        this.bookingEndTime = ''
-        this.bookingName = ''
-        this.bookingEmail = ''
-        this.selectedBooking = null
-        this.closeBookingModal()
+      //     if (event) {
+      //       event.start = this.bookingDate + 'T' + this.bookingStartTime
+      //       event.end = this.bookingDate + 'T' + this.bookingEndTime
+      //       event.title = this.bookingName
+      //       event.bookerEmail = this.bookingEmail
+      //       console.log('SelectedBooking:', this.selectedBooking)
+      //     }
+      //   } else {
+      // Skapa en ny bokning
+      const newBooking = {
+        id: Date.now().toString(), // Generate a unique ID for the new event
+        title: this.bookingName,
+        start: this.bookingDate + 'T' + this.bookingStartTime,
+        end: this.bookingDate + 'T' + this.bookingEndTime,
+        bookerEmail: this.bookingEmail
       }
+      console.log('newbooking', newBooking)
+      this.calendarOptions.events.push(newBooking)
+
+      // Uppdatera lokala lagringen
+      localStorage.setItem('bookings', JSON.stringify(this.calendarOptions.events))
+
+      // Uppdatera bokningsräkning för personen
+      this.bookingCounts[person] = (this.bookingCounts[person] || 0) + 1
+
+      // Refresha kalendern
+      this.$refs.fullcalendar.getApi().refetchEvents()
+
+      // Återställ formulärfält
+      this.bookingDate = ''
+      this.bookingStartTime = ''
+      this.bookingEndTime = ''
+      this.bookingName = ''
+      this.bookingEmail = ''
+      this.selectedBooking = null
+      // this.closeBookingModal()
     },
 
     handleDateClick: function (arg) {
@@ -343,6 +351,7 @@ export default {
 
     handleDeleteClick: function (arg) {
       if (this.selectedBooking) {
+        console.log('vald bokning', this.selectedBooking)
         const savedBookings = localStorage.getItem('bookings')
         if (savedBookings) {
           const bookings = JSON.parse(savedBookings)
@@ -363,30 +372,38 @@ export default {
       }
     },
 
-    editBooking: function () {
+    editBooking: function (booking) {
+      this.bookingName = booking.title
+      this.bookingEmail = booking.booker
+      console.log('book', booking)
       this.closeBookingInfoModal()
       this.isEditing = false
       this.openBookingModal = true
       this.highlightBookedTimes()
-      console.log('IsEditing:', isEditing)
+      console.log('IsEditing:', this.isEditing)
+    },
+
+    resetEditBooking: function (booking) {
+      ;(this.bookingName = ''), (this.bookingEmail = '')
     },
 
     handleEventClick: function (arg) {
       const event = arg.event
       this.isEditing = true
+      console.log('kalle', event.extendedProps)
       this.selectedBooking = {
         id: event.id,
         title: event.title,
         start: event.start,
         end: event.end,
-        booker: event.extendedProps.booker // Lägg till bokarens namn här
+        booker: event.extendedProps.bookerEmail // Lägg till bokarens namn här
       }
       this.bookingDate = event.startStr.split('T')[0]
       this.bookingStartTime = event.startStr.split('T')[1].substring(0, 5)
       this.bookingEndTime = event.endStr.split('T')[1].substring(0, 5)
-      this.bookingName = ''
+      // this.bookingName = ''
       this.openBookingInfoModal = true
-      this.bookingEmail = ''
+      // this.bookingEmail = ''
 
       // this.openBookingModal = true
       // this.handleDeleteClick(arg)
@@ -444,6 +461,7 @@ export default {
                   "
                   @click="handleStartClick(time, $event)"
                   :style="{ backgroundColor: timeDisabledStates[time] ? 'red' : 'green' }"
+                  :class="{ selectedBooking: selectedStartTime === time }"
                   class="time-button"
                   v-for="time in availableTimes"
                   :key="time"
@@ -487,6 +505,7 @@ export default {
                     $event.target.style.backgroundColor = timeDisabledStates[time] ? 'red' : 'green'
                   "
                   class="time-button"
+                  :class="{ selectedBooking: selectedEndTime === time }"
                   v-for="time in availableTimes"
                   :key="time"
                   @click="handleEndClick(time, $event)"
@@ -499,14 +518,48 @@ export default {
               </div>
             </div>
           </div>
+
           <div class="booking-container">
             <div class="modal-label">
-              <label>Namn</label>
-              <input type="text" id="booking-name" v-model="bookingName" required />
+              <!-- <input type="text" id="booking-name" v-model="bookingName" required /> -->
+              <div class="grid gap-6 mb-6 md:grid-cols-2">
+                <div>
+                  <label
+                    for="first_name"
+                    class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                    >Namn</label
+                  >
+                  <input
+                    type="text"
+                    id="booking-name"
+                    v-model="bookingName"
+                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                    placeholder="Namn"
+                    required
+                  />
+                </div>
+              </div>
             </div>
             <div class="modal-label">
-              <label>Mail-adress</label>
-              <input type="email" id="booking-email" v-model="bookingEmail" required />
+              <!-- <label>Mail-adress</label>
+              <input type="email" id="booking-email" v-model="bookingEmail" required /> -->
+              <div class="grid gap-6 mb-6 md:grid-cols-2">
+                <div>
+                  <label
+                    for="email_adress"
+                    class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                    >Mail-adress</label
+                  >
+                  <input
+                    type="text"
+                    id="booking-email"
+                    v-model="bookingEmail"
+                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                    placeholder="Email"
+                    required
+                  />
+                </div>
+              </div>
             </div>
           </div>
           <div class="booking-button">
@@ -524,7 +577,7 @@ export default {
           <p>Starttid: {{ selectedBooking.start.toLocaleString() }}</p>
           <p>Sluttid: {{ selectedBooking.end.toLocaleString() }}</p>
 
-          <button @click="editBooking">Redigera bokning</button>
+          <button @click="editBooking(selectedBooking)">Redigera bokning</button>
           <button @click="handleDeleteClick">Radera bokning</button>
         </div>
         <div v-if="deleteMessage" class="deleteMessage">{{ deleteMessage }}</div>
@@ -604,6 +657,10 @@ export default {
 /* Klassen för att visa att knappen är aktiv */
 .button-active {
   background-color: blue;
+}
+
+.selectedBooking {
+  background-color: white !important;
 }
 
 .time-button:hover,

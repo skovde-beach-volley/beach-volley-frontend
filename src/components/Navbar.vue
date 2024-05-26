@@ -2,7 +2,7 @@
   <nav class="fixed top-0 left-0 w-full z-20 bg-transparent">
     <div class="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
       <a href="/" class="flex items-center space-x-3 rtl:space-x-reverse">
-        <img src="../assets/skovdebeachvolley_logo.png" class="h-16 w-16" alt="skovdebeach-logo" />
+        <img src="../assets/skovdebeachvolley_logo.png" class="h-20 w-20" alt="skovdebeach-logo" />
       </a>
       <div class="flex md:order-2 space-x-3 md:space-x-0 rtl:space-x-reverse">
         <span>
@@ -54,22 +54,24 @@
         <ul
           class="flex flex-col p-4 md:p-0 mt-4 font-medium border border-gray-100 rounded-lg bg-gray-50 md:space-x-8 rtl:space-x-reverse md:flex-row md:mt-0 md:border-0 md:bg-transparent dark:bg-gray-800 md:dark:bg-transparent dark:border-gray-700"
         >
-          <li>
+          <!-- <li>
             <a
               href="/"
               class="nav-link block py-2 px-3 text-white md:bg-transparent md:text-white md:p-0 md:dark:text-white"
               aria-current="page"
               >Hem</a
             >
-          </li>
+          </li> -->
           <li>
             <a href="/about" class="nav-link block py-2 px-3 text-white md:p-0 md:dark:text-white"
               >Om oss</a
             >
           </li>
           <li>
-            <a href="/contact" class="nav-link block py-2 px-3 text-white md:p-0 md:dark:text-white"
-              >Kontakt</a
+            <a
+              href="/training"
+              class="nav-link block py-2 px-3 text-white md:p-0 md:dark:text-white"
+              >Träningsgrupper</a
             >
           </li>
           <li>

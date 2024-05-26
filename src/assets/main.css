@@ -21,13 +21,14 @@ body {
   height: 100%;
   overflow-x: hidden;
   min-width: 580px;
-  background-color: #e6e6ea;
+  /* background: linear-gradient(135deg, #f062d6, #e837b6); */
   /* margin: 0 auto; */
+  background-color: #f5f5f5;
   font-weight: normal;
 }
 
 main {
-  min-height: 1500px;
+  /* min-height: 1500px; */
   height: fit-content;
 }
 

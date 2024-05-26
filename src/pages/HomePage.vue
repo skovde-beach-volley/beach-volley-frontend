@@ -1,7 +1,7 @@
 <template>
   <div>
     <PageHeader />
-    <div class="flex items-center justify-center h-52 w-full">
+    <div class="flex items-center m-10 justify-center h-52 w-full">
       <p class="w-96 text-center">
         Beachvolley Skövde är en dynamisk och passionerad förening som ägnar sig åt att främja och
         utveckla beachvolleybollsporten i Skövde och dess omgivningar. Vi välkomnar spelare i alla
