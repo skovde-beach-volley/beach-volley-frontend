@@ -8,6 +8,5 @@ export default {
 }
 </script>
 <template>
-  <p>Här kan du boka banor</p>
   <booking-form></booking-form>
 </template>

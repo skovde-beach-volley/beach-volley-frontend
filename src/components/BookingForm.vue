@@ -159,11 +159,6 @@ export default {
     }
   },
   methods: {
-    // handleStartClick(time, event) {
-    //   event.target.style.backgroundColor = 'white'
-    //   this.selectStartTime(time, event)
-    // },
-
     handleStartClick(time, event) {
       this.selectedStartTime = time
       this.selectStartTime(time, event)
@@ -225,11 +220,6 @@ export default {
       })
     },
 
-    // selectTime(time) {
-    //   this.bookingStartTime = time
-    //   this.highlightBookedTimes()
-    // },
-
     selectStartTime(time, event) {
       event.preventDefault()
       this.bookingStartTime = time
@@ -244,7 +234,7 @@ export default {
         console.log('Booking end time:', this.bookingEndTime)
         this.highlightBookedTimes()
       }
-      this.handleClick()
+      // this.handleClick()
     },
 
     submitBooking() {
@@ -283,20 +273,6 @@ export default {
         return
       }
 
-      // if (this.bookingDate && this.bookingStartTime && this.bookingEndTime) {
-      //   if (this.selectedBooking !== null) {
-      //     const event = this.calendarOptions.events.find((e) => e.id === this.selectedBooking.id)
-      //     console.log(':', event)
-
-      //     if (event) {
-      //       event.start = this.bookingDate + 'T' + this.bookingStartTime
-      //       event.end = this.bookingDate + 'T' + this.bookingEndTime
-      //       event.title = this.bookingName
-      //       event.bookerEmail = this.bookingEmail
-      //       console.log('SelectedBooking:', this.selectedBooking)
-      //     }
-      //   } else {
-      // Skapa en ny bokning
       const newBooking = {
         id: Date.now().toString(), // Generate a unique ID for the new event
         title: this.bookingName,
@@ -305,6 +281,7 @@ export default {
         bookerEmail: this.bookingEmail
       }
       console.log('newbooking', newBooking)
+      console.log('events', this.event)
       this.calendarOptions.events.push(newBooking)
 
       // Uppdatera lokala lagringen
@@ -323,7 +300,25 @@ export default {
       this.bookingName = ''
       this.bookingEmail = ''
       this.selectedBooking = null
-      // this.closeBookingModal()
+      this.closeBookingModal()
+    },
+
+    handleEditClick: function () {
+      console.log('SelBook:', this.selectedBooking)
+      if (this.selectedBooking) {
+        const event = this.calendarOptions.events.find((e) => e.id === this.selectedBooking.id)
+        console.log('events', event)
+        if (event) {
+          event.start = this.bookingDate + 'T' + this.bookingStartTime
+          event.end = this.bookingDate + 'T' + this.bookingEndTime
+          event.title = this.bookingName
+          event.bookerEmail = this.bookingEmail
+          console.log('events', this.calendarOptions.events)
+        }
+        localStorage.setItem('bookings', JSON.stringify(this.calendarOptions.events))
+        this.closeBookingModal()
+        console.log('selected booking', this.selectedBooking)
+      }
     },
 
     handleDateClick: function (arg) {
@@ -332,17 +327,14 @@ export default {
       const newEvent = {
         id: Date.now().toString(),
         title: 'Bokning',
-        // start: this.bookingDate + 'T' + this.bookingStartTime,
-        // end: this.bookingDate + 'T' + this.bookingEndTime
         start: new Date(arg.dateStr),
         end: endDate
       }
       this.openBookingModal = true
       this.bookingDate = new Date(arg.dateStr).toISOString().split('T')[0]
-      // this.bookingStartTime = new Date(arg.dateStr).toISOString().split('T')[1].substring(0, 5)
-      // this.bookingEndTime = new Date(endDate).toISOString().split('T')[1].substring(0, 5)
       this.bookingStartTime = ''
       this.bookingEndTime = ''
+      this.isEditing = false
       this.highlightBookedTimes()
       // this.calendarOptions.events.push(newEvent)
       console.log('arg:', arg)
@@ -357,11 +349,10 @@ export default {
           const bookings = JSON.parse(savedBookings)
           const updatedBookings = bookings.filter((event) => event.id !== this.selectedBooking.id)
           localStorage.setItem('bookings', JSON.stringify(updatedBookings))
+          console.log('selectedBooking', this.selectedBooking)
         }
         this.calendarOptions.events = this.calendarOptions.events.filter((event) => {
           console.log('event', event)
-          // event.id !== arg.event._def.publicId
-          // return event.id !== arg.event._def.publicId
           return event.id !== this.selectedBooking.id
         })
         this.$refs.fullcalendar.getApi().refetchEvents()
@@ -373,11 +364,12 @@ export default {
     },
 
     editBooking: function (booking) {
+      console.log('booking title', booking.title)
       this.bookingName = booking.title
       this.bookingEmail = booking.booker
       console.log('book', booking)
       this.closeBookingInfoModal()
-      this.isEditing = false
+      this.isEditing = true
       this.openBookingModal = true
       this.highlightBookedTimes()
       console.log('IsEditing:', this.isEditing)
@@ -389,7 +381,7 @@ export default {
 
     handleEventClick: function (arg) {
       const event = arg.event
-      this.isEditing = true
+      this.isEditing = false
       console.log('kalle', event.extendedProps)
       this.selectedBooking = {
         id: event.id,
@@ -398,6 +390,7 @@ export default {
         end: event.end,
         booker: event.extendedProps.bookerEmail // Lägg till bokarens namn här
       }
+      console.log('handleEventClick: SelectedBooking', this.selectedBooking)
       this.bookingDate = event.startStr.split('T')[0]
       this.bookingStartTime = event.startStr.split('T')[1].substring(0, 5)
       this.bookingEndTime = event.endStr.split('T')[1].substring(0, 5)
@@ -411,7 +404,7 @@ export default {
     },
     closeBookingInfoModal: function () {
       this.openBookingInfoModal = false
-      this.selectedBooking = null
+      // this.selectedBooking = null
       this.deleteMessage = ''
     }
   }
@@ -419,14 +412,14 @@ export default {
 </script>
 
 <template>
-  <div class="mt-10">
+  <div class="calender-container mt-36 max-w-6xl">
     <button @click="showModal">Boka tid</button>
 
     <div v-if="openBookingModal" class="modal">
       <div class="modal-content">
         <span class="close" @click="closeBookingModal">&times;</span>
 
-        <form @submit.prevent="submitBooking">
+        <form @submit.prevent="">
           <div class="booking-container">
             <div class="modal-label">
               <label for="booking-date">Datum:</label>
@@ -438,19 +431,7 @@ export default {
                 required
               />
             </div>
-            <!-- <div class="modal-label">
-              <label for="booking-start-time">Startid:</label>
-              <select
-                id="booking-start-time"
-                v-model="bookingStartTime"
-                required
-                @change="highlightBookedTimes"
-              >
-                <option v-for="time in availableTimes" :key="time" :value="time">
-                  {{ time }}
-                </option>
-              </select>
-            </div> -->
+
             <div class="modal-label">
               <label for="booking-start-time">Startid:</label>
               <div class="booking-buttons" id="booking-start-time">
@@ -469,33 +450,9 @@ export default {
                 >
                   {{ time }}
                 </button>
-                <!-- :class="{ 'button-disabled': timeDisabledStates[time] }" -->
-                <!-- :style="{ backgroundColor: timeDisabledStates[time] ? 'red' : 'green' }" -->
               </div>
             </div>
-            <!-- <div class="modal-label">
-              <label for="booking-end-time">Slutid:</label>
-              <select
-                id="booking-end-time"
-                v-model="bookingEndTime"
-                required
-                @change="highlightBookedTimes"
-              >
-                <option v-for="time in availableTimes" :key="time" :value="time">{{ time }}</option>
-              </select> -->
-            <!-- <label for="booking-end-time">Slutid:</label>
-              <div class="booking-buttons" id="booking-end-time">
-                <button
-                  class="time-button"
-                  v-for="time in availableTimes"
-                  :key="time"
-                  :class="{ 'button-disabled': timeDisabledStates[time] }"
-                  @click="selectTime(time)"
-                  :style="{ backgroundColor: timeDisabledStates[time] ? 'red ' : 'green' }"
-                >
-                  {{ time }}
-                </button>
-              </div> -->
+
             <div class="modal-label">
               <label for="booking-end-time">Sluttid:</label>
               <div class="booking-buttons" id="booking-end-time">
@@ -514,14 +471,12 @@ export default {
                 >
                   {{ time }}
                 </button>
-                <!-- :class="{ 'button-disabled': timeDisabledStates[time] }" -->
               </div>
             </div>
           </div>
 
           <div class="booking-container">
             <div class="modal-label">
-              <!-- <input type="text" id="booking-name" v-model="bookingName" required /> -->
               <div class="grid gap-6 mb-6 md:grid-cols-2">
                 <div>
                   <label
@@ -541,8 +496,6 @@ export default {
               </div>
             </div>
             <div class="modal-label">
-              <!-- <label>Mail-adress</label>
-              <input type="email" id="booking-email" v-model="bookingEmail" required /> -->
               <div class="grid gap-6 mb-6 md:grid-cols-2">
                 <div>
                   <label
@@ -562,8 +515,12 @@ export default {
               </div>
             </div>
           </div>
-          <div class="booking-button">
-            <button type="submit">Boka</button>
+          <div v-if="isEditing" class="booking-button">
+            <button @click="handleEditClick()">Redigera bokning</button>
+          </div>
+
+          <div v-else class="booking-button">
+            <button @click="submitBooking()">Boka</button>
           </div>
         </form>
       </div>
