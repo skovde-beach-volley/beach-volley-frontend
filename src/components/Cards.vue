@@ -6,7 +6,7 @@
           class="w-64 h-96 bg-white border border-gray-200 rounded-lg dark:bg-gray-800 dark:border-gray-700"
         >
           <a href="#">
-            <img :src="card.image" class="rounded-t-lg h-32 object-cover" alt="" />
+            <img :src="card.image" class="rounded-t-lg h-1/2 w-full object-cover" alt="" />
           </a>
           <div class="p-5">
             <a href="#">

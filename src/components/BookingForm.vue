@@ -32,7 +32,7 @@ export default {
 
     const username = computed(() => loggedInStore.username)
     const eventColor = computed(() => {
-      return isLoggedIn.value && username.value === 'sanna.asp@hotmail.com' ? 'green' : 'blue'
+      return isLoggedIn.value && username.value === 'sanna.asp@hotmail.com' ? 'green' : 'green'
     })
     return {
       isLoggedIn,
@@ -55,6 +55,7 @@ export default {
       selectedEndTime: '',
       openBookingModal: false,
       openBookingInfoModal: false,
+      openConfirmationModal: false,
       bookingDate: '',
       bookingStartTime: '',
       bookingEndTime: '',
@@ -63,6 +64,7 @@ export default {
       selectedBooking: null,
       isEditing: false,
       deleteMessage: '',
+      confirmedBooking: '',
       bookingCounts: {},
       timeDisabledStates: [],
       availableTimes: [
@@ -111,7 +113,7 @@ export default {
             id: '1',
             title: 'event 1ggg',
             date: '2024-05-18',
-            color: 'red',
+            color: 'blue',
             backgroundColor: 'green'
           },
           { title: 'event 2', date: '2019-04-02' }
@@ -237,7 +239,18 @@ export default {
       // this.handleClick()
     },
 
+    showConfirmedBooking() {
+      this.confirmedBooking = 'Din bokning är bekräftad!'
+      setTimeout(() => {
+        this.confirmedBooking = ''
+      }, 3000)
+    },
+
     submitBooking() {
+      if (!this.bookingName || !this.bookingEmail) {
+        alert('Namn och mail-adress måste fyllas i för att boka.')
+        return
+      }
       const maxBookingsPerPerson = 2
       const maxBookingDuration = 2 * 60 * 60 * 1000
       const person = this.bookingEmail
@@ -300,7 +313,10 @@ export default {
       this.bookingName = ''
       this.bookingEmail = ''
       this.selectedBooking = null
+
       this.closeBookingModal()
+
+      this.showConfirmedBooking()
     },
 
     handleEditClick: function () {
@@ -412,8 +428,18 @@ export default {
 </script>
 
 <template>
-  <div class="calender-container mt-36 max-w-6xl">
-    <button @click="showModal">Boka tid</button>
+  <div class="calender-container mt-36">
+    <div class="flex justify-center flex-col mb-10">
+      <h2 class="text-2xl">Välj en tid för att boka våra beachvolleybollplaner!</h2>
+      <p>Klicka på knappen eller direkt i kalendern för att boka.</p>
+    </div>
+
+    <button
+      class="text-white bg-gradient-to-r from-pink-400 via-pink-500 to-pink-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-pink-300 dark:focus:ring-pink-800 font-medium rounded-lg text-sm w-32 px-3 py-2 text-center mb-2"
+      @click="showModal"
+    >
+      Boka tid
+    </button>
 
     <div v-if="openBookingModal" class="modal">
       <div class="modal-content">
@@ -438,10 +464,12 @@ export default {
                 <button
                   @mouseover="$event.target.style.backgroundColor = 'black'"
                   @mouseleave="
-                    $event.target.style.backgroundColor = timeDisabledStates[time] ? 'red' : 'green'
+                    $event.target.style.backgroundColor = timeDisabledStates[time]
+                      ? 'red'
+                      : 'lightgreen'
                   "
                   @click="handleStartClick(time, $event)"
-                  :style="{ backgroundColor: timeDisabledStates[time] ? 'red' : 'green' }"
+                  :style="{ backgroundColor: timeDisabledStates[time] ? 'red' : 'lightgreen' }"
                   :class="{ selectedBooking: selectedStartTime === time }"
                   class="time-button"
                   v-for="time in availableTimes"
@@ -459,14 +487,16 @@ export default {
                 <button
                   @mouseover="$event.target.style.backgroundColor = 'black'"
                   @mouseleave="
-                    $event.target.style.backgroundColor = timeDisabledStates[time] ? 'red' : 'green'
+                    $event.target.style.backgroundColor = timeDisabledStates[time]
+                      ? 'red'
+                      : 'lightgreen'
                   "
                   class="time-button"
                   :class="{ selectedBooking: selectedEndTime === time }"
                   v-for="time in availableTimes"
                   :key="time"
                   @click="handleEndClick(time, $event)"
-                  :style="{ backgroundColor: timeDisabledStates[time] ? 'red' : 'green' }"
+                  :style="{ backgroundColor: timeDisabledStates[time] ? 'red' : 'lightgreen' }"
                   :disabled="timeDisabledStates[time]"
                 >
                   {{ time }}
@@ -475,7 +505,7 @@ export default {
             </div>
           </div>
 
-          <div class="booking-container">
+          <div class="email-container">
             <div class="modal-label">
               <div class="grid gap-6 mb-6 md:grid-cols-2">
                 <div>
@@ -513,14 +543,25 @@ export default {
                   />
                 </div>
               </div>
+              <div v-if="confirmedBooking" class="confirmedMessage">{{ confirmedBooking }}</div>
             </div>
           </div>
-          <div v-if="isEditing" class="booking-button">
-            <button @click="handleEditClick()">Redigera bokning</button>
+          <div v-if="isEditing" class="bookingtime-button">
+            <button
+              class="text-white bg-gradient-to-r from-pink-400 via-pink-500 to-pink-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-pink-300 dark:focus:ring-pink-800 font-medium rounded-lg text-sm w-32 px-3 py-2 text-center mb-2"
+              @click="handleEditClick()"
+            >
+              Redigera bokning
+            </button>
           </div>
 
-          <div v-else class="booking-button">
-            <button @click="submitBooking()">Boka</button>
+          <div v-else class="bookingtime-button">
+            <button
+              class="text-white bg-gradient-to-r from-pink-400 via-pink-500 to-pink-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-pink-300 dark:focus:ring-pink-800 font-medium rounded-lg text-sm w-32 px-3 py-2 text-center mb-2"
+              @click="submitBooking()"
+            >
+              Boka
+            </button>
           </div>
         </form>
       </div>
@@ -529,15 +570,31 @@ export default {
       <div class="modal-content">
         <span class="close" @click="closeBookingInfoModal">&times;</span>
         <div v-if="selectedBooking && !deleteMessage">
-          <h2>Här är din bokning</h2>
           <p>Bokningens namn: {{ selectedBooking.title }}</p>
           <p>Starttid: {{ selectedBooking.start.toLocaleString() }}</p>
           <p>Sluttid: {{ selectedBooking.end.toLocaleString() }}</p>
-
-          <button @click="editBooking(selectedBooking)">Redigera bokning</button>
-          <button @click="handleDeleteClick">Radera bokning</button>
+          <div class="buttons-container">
+            <button
+              class="text-white bg-gradient-to-r from-pink-400 via-pink-500 to-pink-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-pink-300 dark:focus:ring-pink-800 font-medium rounded-lg text-sm w-32 px-3 py-2 text-center mb-2 mr-10 mt-10"
+              @click="editBooking(selectedBooking)"
+            >
+              Redigera bokning
+            </button>
+            <button
+              class="text-white bg-gradient-to-r from-pink-400 via-pink-500 to-pink-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-pink-300 dark:focus:ring-pink-800 font-medium rounded-lg text-sm w-32 px-3 py-2 text-center mb-2 mt-10"
+              @click="handleDeleteClick"
+            >
+              Radera bokning
+            </button>
+          </div>
         </div>
         <div v-if="deleteMessage" class="deleteMessage">{{ deleteMessage }}</div>
+        <div v-if="openConfirmationModal" class="modal">
+          <div class="modal-content">
+            <span class="close" @click="openConfirmationModal = false">&times;</span>
+            <div class="confirmedMessage">{{ confirmedBooking }}</div>
+          </div>
+        </div>
       </div>
     </div>
 
@@ -546,6 +603,13 @@ export default {
 </template>
 
 <style scoped>
+.calender-container {
+  margin-bottom: 50px;
+  background-color: rgb(255, 255, 255, 0.9);
+  border-radius: 0 0 20px 20px;
+  padding: 40px;
+}
+
 .modal {
   display: block;
   position: fixed;
@@ -559,10 +623,6 @@ export default {
   pointer-events: none;
 }
 
-.booking-buttons {
-  width: 300px;
-}
-
 .modal-content {
   background-color: #fefefe;
   margin: 15% auto;
@@ -570,6 +630,15 @@ export default {
   border: 1px solid #888;
   width: 80%;
   pointer-events: auto;
+  border-radius: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.confirmedMessage {
+  color: black;
+  font-weight: bold;
+  margin-top: 20px;
+  text-align: center;
 }
 
 .close {
@@ -588,11 +657,33 @@ export default {
   flex-direction: row;
 }
 
-.booking-button {
+/* .email-container {
+  width: 50%;
+} */
+
+.buttons-container {
+  display: flex;
+  flex-direction: row;
+}
+
+.bookingtime-button {
+  display: flex;
+  justify-content: center;
+}
+
+/* .booking-button {
   display: flex;
   flex-direction: row;
   justify-content: center;
-}
+
+  margin-bottom: 10px;
+  padding: 10px;
+  background-color: #c143ae;
+  color: #fff;
+  border: none;
+  border-radius: 3px;
+  cursor: pointer;
+} */
 
 .time-button {
   padding: 8px 16px;
@@ -603,7 +694,7 @@ export default {
 }
 
 .time-button[disabled] {
-  background-color: red;
+  background-color: blue;
 }
 
 /* Hover-effekt */

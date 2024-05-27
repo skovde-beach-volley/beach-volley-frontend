@@ -1,5 +1,5 @@
 <template>
-  <nav class="fixed top-0 left-0 w-full z-20 bg-transparent">
+  <nav :class="{ scrolled: isScrolled }" class="fixed top-0 left-0 w-full z-20 bg-transparent">
     <div class="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
       <a href="/" class="flex items-center space-x-3 rtl:space-x-reverse">
         <img src="../assets/skovdebeachvolley_logo.png" class="h-20 w-20" alt="skovdebeach-logo" />
@@ -54,14 +54,6 @@
         <ul
           class="flex flex-col p-4 md:p-0 mt-4 font-medium border border-gray-100 rounded-lg bg-gray-50 md:space-x-8 rtl:space-x-reverse md:flex-row md:mt-0 md:border-0 md:bg-transparent dark:bg-gray-800 md:dark:bg-transparent dark:border-gray-700"
         >
-          <!-- <li>
-            <a
-              href="/"
-              class="nav-link block py-2 px-3 text-white md:bg-transparent md:text-white md:p-0 md:dark:text-white"
-              aria-current="page"
-              >Hem</a
-            >
-          </li> -->
           <li>
             <a href="/about" class="nav-link block py-2 px-3 text-white md:p-0 md:dark:text-white"
               >Om oss</a
@@ -87,22 +79,36 @@
 
 <script>
 import { useLoggedInStore } from '@/stores/loggedIn'
-import { computed } from 'vue'
+import { computed, onMounted, onUnmounted, ref } from 'vue'
 
 export default {
   name: 'NavBar',
   setup() {
     const loggedInStore = useLoggedInStore()
     const isLoggedIn = computed(() => loggedInStore.isLoggedIn)
+    const isScrolled = ref(false)
 
     const logOut = () => {
       loggedInStore.logOut()
       console.log('utloggad')
     }
 
+    const handleScroll = () => {
+      isScrolled.value = window.scrollY > 50
+    }
+
+    onMounted(() => {
+      window.addEventListener('scroll', handleScroll)
+    })
+
+    onUnmounted(() => {
+      window.removeEventListener('scroll', handleScroll)
+    })
+
     return {
       isLoggedIn,
-      logOut
+      logOut,
+      isScrolled
     }
   }
 }
@@ -111,6 +117,11 @@ export default {
 <style>
 nav {
   background-color: transparent; /* Transparent background */
+  transition: background-color 0.3s ease;
+}
+
+nav.scrolled {
+  background-color: rgba(0, 0, 0, 0.5); /* Background color when scrolled */
 }
 
 .nav-link {

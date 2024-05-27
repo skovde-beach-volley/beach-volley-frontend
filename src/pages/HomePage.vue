@@ -18,6 +18,10 @@
 import PageHeader from '../components/PageHeader.vue'
 import Cards from '../components/Cards.vue'
 
+import image1 from '../assets/front-view-female.jpg'
+import image2 from '../assets/group.jpg'
+import image3 from '../assets/front-view-female.jpg'
+
 export default {
   components: {
     PageHeader,
@@ -27,18 +31,18 @@ export default {
     return {
       cards: [
         {
-          image: './assets/skovdebeachvolley_logo.png',
+          image: image1,
           title: 'Träningsgrupper',
           description:
             'Here are the biggest enterprise technology acquisitions of 2021 so far, in reverse chronological order.'
         },
         {
-          image: 'path/to/image2.jpg',
+          image: image2,
           title: 'Vart finns vi',
           description: 'Details about another significant acquisition in the tech industry.'
         },
         {
-          image: 'path/to/image3.jpg',
+          image: image3,
           title: 'Bli medlem',
           description: 'Information about major technology deals that took place in 2021.'
         }
