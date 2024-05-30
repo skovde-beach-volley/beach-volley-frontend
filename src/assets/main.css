@@ -1,20 +1,36 @@
 @import './base.css';
 @import '/node_modules/flowbite-vue/dist/index.css';
+@import url('https://fonts.googleapis.com/css2?family=Pacifico&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Great+Vibes&display=swap');
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 @font-face {
-  font-family: 'plus-sans';
+  /* font-family: 'plus-sans';
   src:
     url('@/assets/fonts/Plus_Jakarta_Sans') format('woff2'),
-    url('@/assets/fonts/mitt-anpassade-typsnitt.woff') format('woff');
-  /* Andra format kan läggas till här om nödvändigt */
+    url('@/assets/fonts/mitt-anpassade-typsnitt.woff') format('woff'); */
+
+  font-family: 'quicksand';
+  src: url('../assets/fonts/Plus_Jakarta_Sans\,Quicksand/') format('truetype');
+}
+
+@font-face {
+  font-family: Quicksand;
+  src: url(../../assets/fonts/Plus_Jakarta_Sans,Quicksand-Regular.ttf);
+}
+
+@font-face {
+  font-family: OpenSans;
+  src: url('../../assets/fonts/OpenSans-Regular.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
 }
 
 body {
-  font-family: 'plus-sans', sans-serif;
+  font-family: 'Arial';
   margin: 0;
   padding: 0;
   width: 100%;
@@ -24,6 +40,9 @@ body {
   /* background: linear-gradient(135deg, #f062d6, #e837b6); */
   /* margin: 0 auto; */
   background-color: #f5f5f5;
+  /* background-color: #8bb8e2; */
+  /* background: radial-gradient(#6a9fc2, #d9d9d9, #6a9fc2); */
+
   font-weight: normal;
 }
 

@@ -5,21 +5,32 @@ export default {
 </script>
 
 <template>
-  <header class="header"><h1 class="header-text">Skövde beachvolley</h1></header>
+  <header class="header">
+    <div class="header-content">
+      <h1 class="header-text">Skövde Beachvolley</h1>
+      <a href="/booking">
+        <button
+          class="header-button text-white bg-gradient-to-r from-pink-400 via-pink-500 to-pink-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-pink-300 dark:focus:ring-pink-800 font-medium rounded-lg text-lg text-center mb-2"
+        >
+          Boka & spela Beachvolleyboll!
+        </button>
+      </a>
+    </div>
+  </header>
 </template>
 
 <style>
 .header {
-  position: relative; /* Behövs för att positionera pseudo-element rätt */
+  position: relative;
   background-image: url(../assets/side-view.jpg);
-  background-size: cover; /* Gör att bilden täcker hela elementets yta */
-  background-position: center; /* Centrerar bilden i elementet */
-  height: 70vh; /* Sätter höjden på headern till 50% av viewportens höjd */
-  width: 100%; /* Sätter bredden på headern till 100% av viewportens bredd */
-  background-repeat: no-repeat; /* Förhindrar att bilden upprepas */
-  display: flex; /* Gör det möjligt att centrera innehåll */
-  align-items: center; /* Vertikal centrering av innehåll */
-  justify-content: center; /* Horisontell centrering av innehåll */
+  background-size: cover;
+  background-position: center;
+  height: 70vh;
+  width: 100%;
+  background-repeat: no-repeat;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
 }
 
 .header::before {
@@ -29,16 +40,31 @@ export default {
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent svart färg */
-  z-index: 1; /* Lägger pseudo-elementet under texten */
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 1;
+}
+
+.header-content {
+  position: relative;
+  z-index: 2;
+  text-align: center;
+  margin-bottom: 40px;
 }
 
 .header h1 {
-  position: relative; /* Behövs för att positionera texten ovanför pseudo-elementet */
-  color: white; /* Gör texten vit för bättre kontrast */
-  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5); /* Lägger till skugga för att göra texten mer läsbar */
-  font-size: 40px;
-  margin-left: 40px;
-  z-index: 2; /* Lägger texten ovanför pseudo-elementet */
+  color: white;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+  font-size: 120px;
+  font-family: 'Great Vibes', cursive;
+  margin: 0;
+}
+
+.header-button {
+  margin-top: 20px;
+  padding: 16px 32px; /* Larger padding for a bigger button */
+  font-size: 30px; /* Larger font size */
+  width: 300px; /* Larger width */
+  height: 100px; /* Larger height */
+  z-index: 3;
 }
 </style>

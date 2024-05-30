@@ -1,13 +1,14 @@
 <template>
   <div>
     <PageHeader />
-    <div class="flex items-center m-10 justify-center h-52 w-full">
-      <p class="w-96 text-center">
+    <div class="flex items-center justify-center h-52 m-20">
+      <p class="page-header w-96 text-center">
         Beachvolley Skövde är en dynamisk och passionerad förening som ägnar sig åt att främja och
         utveckla beachvolleybollsporten i Skövde och dess omgivningar. Vi välkomnar spelare i alla
         åldrar och på alla nivåer, från nybörjare till erfarna atleter.
       </p>
     </div>
+    <hr class="line-container" />
     <div>
       <Cards :cards="cards" />
     </div>
@@ -51,3 +52,17 @@ export default {
   }
 }
 </script>
+
+<style>
+.page-header {
+  color: black;
+}
+.line-container {
+  border: 0;
+  height: 2px; /* Sätter höjden på linjen */
+  background-color: #c143ae; /* Sätter färgen på linjen */
+  margin: 20px auto; /* Lägger till marginaler ovanför och under linjen */
+  width: 50%;
+  justify-content: center;
+}
+</style>

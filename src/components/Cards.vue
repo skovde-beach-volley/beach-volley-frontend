@@ -3,7 +3,7 @@
     <div class="cards flex flex-row justify-center flex-wrap">
       <div v-for="(card, index) in cards" :key="index" class="p-12">
         <div
-          class="w-64 h-96 bg-white border border-gray-200 rounded-lg dark:bg-gray-800 dark:border-gray-700"
+          class="card w-64 h-96 border border-gray-200 rounded-lg dark:bg-gray-800 dark:border-gray-700 shadow-lg"
         >
           <a href="#">
             <img :src="card.image" class="rounded-t-lg h-1/2 w-full object-cover" alt="" />
@@ -36,20 +36,27 @@ export default {
 
 <style>
 .cards-container {
-  background: linear-gradient(135deg, #f062d6, #e837b6);
+  /* background: linear-gradient(135deg, #f062d6, #e837b6); */
   padding-top: 10px;
-  box-shadow:
-    inset 0 4px 6px rgba(0, 0, 0, 0.1),
-    inset 0 -4px 6px rgba(0, 0, 0, 0.1),
-    inset 0 6px 10px rgba(0, 0, 0, 0.1),
-    inset 0 -6px 10px rgba(0, 0, 0, 0.1),
-    inset 0 8px 12px rgba(0, 0, 0, 0.1),
-    inset 0 -8px 12px rgba(0, 0, 0, 0.1);
 }
 
 .cards {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
+}
+
+.card {
+  background-color: whitesmoke;
+  /* background-color: #8bb8e2; */
+  transition: transform 0.2s ease-in-out; /* Transition för en mjuk animering */
+}
+
+.card:hover {
+  transform: scale(1.05); /* Gör kortet 5% större vid hover */
+}
+
+.test {
+  background-color: #c143ae;
 }
 </style>

@@ -13,16 +13,16 @@
           />
         </a>
         <ul
-          class="flex flex-wrap items-center mb-6 text-sm font-medium text-gray-500 sm:mb-0 dark:text-gray-400"
+          class="flex justify-center items-start flex-wrap mb-6 text-sm font-medium text-gray-500 sm:mb-0 dark:text-gray-400"
         >
-          <li>
-            <a href="#" class="hover:underline me-4 md:me-6">Kontakt</a>
-            <p class="hover:underline me-4 md:me-6 text-sm">skovdebeachvolley@gmail.com</p>
+          <li class="me-4 md:me-6">
+            <a href="#" class="hover:underline">Kontakt</a>
+            <p class="hover:underline text-sm">skovdebeachvolley@gmail.com</p>
           </li>
-          <li>
+          <li class="me-4 md:me-6">
             <a href="#" class="hover:underline">Följ oss</a>
-            <p class="hover:underline me-4 md:me-6 text-sm">Facebook</p>
-            <p class="hover:underline me-4 md:me-6 text-sm">Instagram</p>
+            <p class="hover:underline text-sm">Facebook</p>
+            <p class="hover:underline text-sm">Instagram</p>
           </li>
         </ul>
       </div>
@@ -35,3 +35,9 @@
     </div>
   </footer>
 </template>
+
+<style scoped>
+ul {
+  align-items: flex-start;
+}
+</style>

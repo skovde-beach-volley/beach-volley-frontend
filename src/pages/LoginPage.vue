@@ -86,7 +86,8 @@ export default {
   justify-content: center;
   align-items: center;
   height: 100vh; /* Full height for demonstration */
-  background: radial-gradient(circle, #8bb8e2, #ffffff, #8bb8e2);
+  /* background: radial-gradient(circle, #8bb8e2, #ffffff, #8bb8e2); */
+  background-color: #8bb8e2;
   background-size: 400% 400%;
   animation: shiny 3s forwards; /* Run once and then stop */
   color: #333;
@@ -96,7 +97,7 @@ export default {
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
-@keyframes shiny {
+/* @keyframes shiny {
   0% {
     background-position: 50% 50%;
   }
@@ -106,7 +107,7 @@ export default {
   100% {
     background-position: 50% 50%;
   }
-}
+} */
 
 .content {
   display: flex;
