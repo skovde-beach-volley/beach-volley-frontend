@@ -53,21 +53,18 @@ export default {
 
 .card {
   background-color: whitesmoke;
-  /* color: #2c3e50; */
-  /* color: #0b132b; */
-  /* background-color: #8bb8e2; */
-  transition: transform 0.2s ease-in-out; /* Transition för en mjuk animering */
-  position: relative; /* Gör att den inre positioneringen kan användas */
+  transition: transform 0.2s ease-in-out;
+  position: relative;
 }
 
 .card:hover {
-  transform: scale(1.05); /* Gör kortet 5% större vid hover */
+  transform: scale(1.05);
 }
 
 .read-more {
-  position: absolute; /* Gör att länken kan positioneras absolut inom kortet */
-  bottom: 10px; /* Placera länken 10px från botten av kortet */
-  right: 10px; /* Placera länken 10px från höger sida av kortet */
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
 }
 
 .test {

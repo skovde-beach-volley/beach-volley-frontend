@@ -88,8 +88,8 @@ export default {
 <style scoped>
 .header {
   position: relative;
-  background-image: url('../assets/playing.jpg');
-  background-position: center; /* Centrera bilden */
+  background-image: url('../assets/images/playing.jpg');
+  background-position: center;
   background-size: cover;
   background-position: center;
   height: 50vh;
@@ -104,9 +104,7 @@ export default {
   justify-content: center;
   align-items: center;
   height: 50vh;
-  /* background-color: #8bb8e2; */
   background-size: 400% 400%;
-  /* animation: shiny 3s forwards; */
   color: #333;
   text-align: center;
   padding: 20px;
@@ -118,10 +116,7 @@ export default {
   display: flex;
   flex-direction: column;
   justify-content: center;
-  align-items: stretch; /* Ensures children take up the full height */
-  /* background: white;
-  border-radius: 10px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); */
+  align-items: stretch;
   overflow: hidden;
   width: 80%;
   max-width: 1200px;

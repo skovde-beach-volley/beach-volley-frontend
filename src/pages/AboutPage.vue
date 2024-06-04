@@ -30,7 +30,7 @@ export default {
         </p>
       </div>
       <div class="image-section">
-        <img src="../assets/front-view-female.jpg" alt="Beachvolleyboll i Skövde" />
+        <img src="../assets/images/front-view-female.jpg" alt="Beachvolleyboll i Skövde" />
       </div>
     </div>
   </div>
@@ -39,8 +39,8 @@ export default {
 <style scoped>
 .header {
   position: relative;
-  background-image: url('../assets/playing.jpg');
-  background-position: center; /* Centrera bilden */
+  background-image: url('../assets/images/playing.jpg');
+  background-position: center;
   background-size: cover;
   background-position: center;
   height: 50vh;

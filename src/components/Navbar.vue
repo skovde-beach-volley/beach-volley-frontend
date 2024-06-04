@@ -51,7 +51,7 @@ export default {
       <a class="flex items-center space-x-3 rtl:space-x-reverse">
         <RouterLink to="/">
           <img
-            src="../assets/skovdebeachvolley_logo.png"
+            src="../assets/images/skovdebeachvolley_logo.png"
             class="h-20 w-16"
             alt="skovdebeach-logo"
           />
@@ -72,7 +72,7 @@ export default {
             v-else
             @click.prevent="logOut"
             to="#"
-            class="block py-2 px-3 text-white bg-red-700 rounded md:bg-transparent md:text-white md:p-0 md:dark:text-white"
+            class="block py-2 px-3 text-white bg-blue-700 rounded md:bg-transparent md:text-white md:p-0 md:dark:text-white"
             aria-current="page"
             >Logga ut</RouterLink
           >
@@ -147,26 +147,26 @@ export default {
 
 <style>
 nav.bg-dark {
-  background-color: rgba(0, 0, 0, 0.5); /* Mörk bakgrundsfärg */
+  background-color: rgba(0, 0, 0, 0.5);
 }
 
 nav.bg-transparent {
-  background-color: transparent; /* Transparent bakgrund */
+  background-color: transparent;
 }
 
 .nav-link {
   position: relative;
-  text-decoration: none; /* Ta bort understrykning */
+  text-decoration: none;
   transition: color 0.3s;
 }
 
 .nav-link:visited {
-  color: inherit; /* Se till att besökta länkar ärvs färg */
+  color: inherit;
 }
 
 .nav-link:hover,
 .nav-link:focus {
-  color: inherit; /* Ärvs färg vid hover och focus */
+  color: #faf2e9;
 }
 
 .nav-link::after {
@@ -190,6 +190,6 @@ nav.bg-transparent {
 }
 
 a:focus {
-  outline: none; /* Ta bort standard focus outline */
+  outline: none;
 }
 </style>

@@ -7,14 +7,16 @@ export default {
 <template>
   <header class="header">
     <div class="header-content">
-      <h1 class="header-text p-10">Skövde Beachvolley</h1>
-      <a RouterLink to="/booking">
+      <div data-aos="fade-up">
+        <h1 class="header-text p-10">Skövde Beachvolley</h1>
+      </div>
+      <RouterLink to="/booking">
         <button
           class="button-font text-white bg-gradient-to-r from-pink-400 via-pink-500 to-pink-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-pink-300 dark:focus:ring-pink-800 font-medium rounded-lg text-2xl w-58 text-center p-5"
         >
           Boka beachvolleybollplan!
         </button>
-      </a>
+      </RouterLink>
     </div>
   </header>
 </template>
@@ -22,7 +24,7 @@ export default {
 <style>
 .header {
   position: relative;
-  background-image: url(../assets/side-view.jpg);
+  background-image: url(../assets/images/side-view.jpg);
   background-size: cover;
   background-position: center;
   height: 70vh;
@@ -56,8 +58,6 @@ export default {
 }
 
 .header h1 {
-  /* color: white; */
-  /* text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5); */
   font-size: 80px;
   color: #faf2e9;
   font-family: 'Oswald', sans-serif;
@@ -67,10 +67,10 @@ export default {
 
 .header-button {
   margin-top: 20px;
-  padding: 16px 32px; /* Larger padding for a bigger button */
-  font-size: 30px; /* Larger font size */
-  width: 300px; /* Larger width */
-  height: 100px; /* Larger height */
+  padding: 16px 32px;
+  font-size: 30px;
+  width: 300px;
+  height: 100px;
   z-index: 3;
 }
 </style>
