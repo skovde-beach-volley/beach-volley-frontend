@@ -1,11 +1,11 @@
 <script>
-import NavBar from './components/NavBar.vue'
+import Navbar from './components/Navbar.vue'
 import Footer from './components/Footer.vue'
 import { RouterLink, RouterView } from 'vue-router'
 
 export default {
   components: {
-    NavBar,
+    Navbar,
     Footer
   },
   data() {
@@ -19,7 +19,7 @@ export default {
 <template>
   <body>
     <div class="app-container">
-      <NavBar :loggedIn="loggedIn" />
+      <Navbar :loggedIn="loggedIn" />
       <main>
         <RouterView />
       </main>
