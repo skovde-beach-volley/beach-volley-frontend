@@ -7,7 +7,7 @@
           class="flex items-center mb-4 sm:mb-0 space-x-3 rtl:space-x-reverse"
         >
           <img
-            src="../assets/skovdebeachvolley_logo.png"
+            src="../assets/images/skovdebeachvolley_logo.png"
             class="h-16 w-16"
             alt="Skovdebeachvolley"
           />
@@ -16,13 +16,20 @@
           class="flex justify-center items-start flex-wrap mb-6 text-sm font-medium text-gray-500 sm:mb-0 dark:text-gray-400"
         >
           <li class="me-4 md:me-6">
-            <a href="#" class="hover:underline">Kontakt</a>
+            <a class="hover:underline">Kontakt</a>
             <p class="hover:underline text-sm">skovdebeachvolley@gmail.com</p>
           </li>
           <li class="follow-us me-4 md:me-6">
-            <!-- <a href="#" class="hover:underline">Följ oss</a> -->
-            <img src="../assets/facebook.png" class="mr-5 h-12 w-12" alt="Skovdebeachvolley" />
-            <img src="../assets/instagram.png" class="h-12 w-12" alt="Skovdebeachvolley" />
+            <a href="https://www.facebook.com/groups/skovdebeachvolley">
+              <img
+                src="../assets/images/facebook.png"
+                class="mr-5 h-12 w-12"
+                alt="Skovdebeachvolley"
+              />
+            </a>
+            <a href="https://www.instagram.com/skovdebeachvolley/">
+              <img src="../assets/images/instagram.png" class="h-12 w-12" alt="Skovdebeachvolley" />
+            </a>
           </li>
         </ul>
       </div>

@@ -1,29 +1,41 @@
 <script>
 export default {
   props: {
-    selectedBooking: Object,
-    deleteMessage: String
+    selectedBooking: Object
   },
-  emits: ['edit', 'delete', 'close'],
+  emits: ['edit', 'delete', 'close', 'closeModal'],
+  data() {
+    return {
+      openConfirmationModal: false,
+      openBookingInfoModal: false
+    }
+  },
   methods: {
     editBooking(booking) {
       this.$emit('edit', booking)
     },
     handleDeleteClick(booking) {
       this.$emit('delete', booking)
+      this.openConfirmationModal = true
+    },
+    closeConfirmationModal() {
+      // Dölj bekräftelsemodalen när användaren stänger den
+      this.openConfirmationModal = false
+      this.openBookingInfoModal = false
+      this.$emit('closeModal')
     }
   }
 }
 </script>
 
 <template>
-  <div v-if="selectedBooking" class="modal">
+  <div v-if="selectedBooking">
     <div class="modal-content">
       <span class="close" @click="$emit('close')">&times;</span>
-      <div v-if="!deleteMessage">
-        <p><Strong>Bokningens namn:</Strong> {{ selectedBooking.title }}</p>
-        <p><Strong>Starttid: </Strong> {{ new Date(selectedBooking.start).toLocaleString() }}</p>
-        <p><Strong>Sluttid:</Strong> {{ new Date(selectedBooking.end).toLocaleString() }}</p>
+      <div v-if="!openConfirmationModal">
+        <p><strong>Bokningens namn:</strong> {{ selectedBooking.title }}</p>
+        <p><strong>Starttid:</strong> {{ new Date(selectedBooking.start).toLocaleString() }}</p>
+        <p><strong>Sluttid:</strong> {{ new Date(selectedBooking.end).toLocaleString() }}</p>
         <div class="buttons-container">
           <button
             class="text-white bg-gradient-to-r from-pink-400 via-pink-500 to-pink-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-pink-300 dark:focus:ring-pink-800 font-medium rounded-lg text-sm w-32 px-3 py-2 text-center mb-2 mr-10 mt-10"
@@ -39,12 +51,13 @@ export default {
           </button>
         </div>
       </div>
-      <div>
-        <div v-if="deleteMessage" class="modal">
-          <div class="modal-content">
-            <div class="confirmedMessage">{{ deleteMessage }}</div>
-          </div>
-        </div>
+    </div>
+  </div>
+  <div v-if="openConfirmationModal">
+    <div class="modal">
+      <div class="modal-content">
+        <span class="close" @click="closeConfirmationModal">&times;</span>
+        <div class="confirmedMessage">Din bokning är raderad!</div>
       </div>
     </div>
   </div>

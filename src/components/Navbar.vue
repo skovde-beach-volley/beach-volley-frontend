@@ -3,7 +3,7 @@ import { useLoggedInStore } from '@/stores/loggedIn'
 import { computed, ref, onMounted, onUnmounted } from 'vue'
 
 export default {
-  name: 'NavBar',
+  name: 'Navbar',
   setup() {
     const loggedInStore = useLoggedInStore()
     const isLoggedIn = computed(() => loggedInStore.isLoggedIn)
@@ -51,7 +51,7 @@ export default {
       <a class="flex items-center space-x-3 rtl:space-x-reverse">
         <RouterLink to="/">
           <img
-            src="../assets/skovdebeachvolley_logo.png"
+            src="../assets/images/skovdebeachvolley_logo.png"
             class="h-20 w-16"
             alt="skovdebeach-logo"
           />
@@ -72,7 +72,7 @@ export default {
             v-else
             @click.prevent="logOut"
             to="#"
-            class="block py-2 px-3 text-white bg-red-700 rounded md:bg-transparent md:text-white md:p-0 md:dark:text-white"
+            class="block py-2 px-3 text-white bg-blue-700 rounded md:bg-transparent md:text-white md:p-0 md:dark:text-white"
             aria-current="page"
             >Logga ut</RouterLink
           >
@@ -113,31 +113,31 @@ export default {
           class="flex flex-col p-4 md:p-0 mt-4 font-medium border border-gray-100 rounded-lg md:space-x-8 rtl:space-x-reverse md:flex-row md:mt-0 md:border-0 md:bg-transparent dark:bg-gray-800 md:dark:bg-transparent dark:border-gray-700"
         >
           <li>
-            <a
-              href="/about"
+            <RouterLink
+              to="/about"
               class="nav-link block py-2 px-3 md:p-0"
               :class="{ 'text-black': menuOpen, 'text-white': !menuOpen }"
             >
               Om oss
-            </a>
+            </RouterLink>
           </li>
           <li>
-            <a
-              href="/training"
+            <RouterLink
+              to="/training"
               class="nav-link block py-2 px-3 md:p-0"
               :class="{ 'text-black': menuOpen, 'text-white': !menuOpen }"
             >
               Träningsgrupper
-            </a>
+            </RouterLink>
           </li>
           <li>
-            <a
-              href="/booking"
+            <RouterLink
+              to="/booking"
               class="nav-link block py-2 px-3 md:p-0"
               :class="{ 'text-black': menuOpen, 'text-white': !menuOpen }"
             >
               Boka volleybollplan
-            </a>
+            </RouterLink>
           </li>
         </ul>
       </div>
@@ -147,26 +147,26 @@ export default {
 
 <style>
 nav.bg-dark {
-  background-color: rgba(0, 0, 0, 0.5); /* Mörk bakgrundsfärg */
+  background-color: rgba(0, 0, 0, 0.5);
 }
 
 nav.bg-transparent {
-  background-color: transparent; /* Transparent bakgrund */
+  background-color: transparent;
 }
 
 .nav-link {
   position: relative;
-  text-decoration: none; /* Ta bort understrykning */
+  text-decoration: none;
   transition: color 0.3s;
 }
 
 .nav-link:visited {
-  color: inherit; /* Se till att besökta länkar ärvs färg */
+  color: inherit;
 }
 
 .nav-link:hover,
 .nav-link:focus {
-  color: inherit; /* Ärvs färg vid hover och focus */
+  color: #faf2e9;
 }
 
 .nav-link::after {
@@ -190,6 +190,6 @@ nav.bg-transparent {
 }
 
 a:focus {
-  outline: none; /* Ta bort standard focus outline */
+  outline: none;
 }
 </style>

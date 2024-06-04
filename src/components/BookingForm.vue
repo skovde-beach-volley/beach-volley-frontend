@@ -129,7 +129,7 @@ export default {
         if (isLoggedIn && username === 'sanna.asp@hotmail.com') {
           return { eventColor: 'green' }
         } else {
-          return { eventColor: 'blue', borderColor: 'blue', color: 'white' }
+          return { eventColor: 'green', borderColor: 'green', color: 'white' }
         }
       }
     }
@@ -157,6 +157,7 @@ export default {
       this.resetButtonStyles()
       this.resetEditBooking()
       this.showEditConfirmation = false
+      this.openConfirmationModal = false
     },
     resetButtonStyles() {
       this.selectedStartTime = ''
@@ -184,8 +185,8 @@ export default {
           booking.color = 'green'
           booking.textColor = 'white'
         } else {
-          booking.backgroundColor = '#8bb8e2'
-          booking.color = '#8bb8e2'
+          booking.backgroundColor = '#green'
+          booking.color = '#green'
           booking.textColor = 'white'
         }
       })
@@ -328,7 +329,6 @@ export default {
     handleDeleteClick: function (booking) {
       if (this.isLoggedIn) {
         if (booking.booker === this.username) {
-          // Use bookerEmail if that's the correct property
           const savedBookings = localStorage.getItem('bookings')
           if (savedBookings) {
             const bookings = JSON.parse(savedBookings)
@@ -340,13 +340,17 @@ export default {
             return event.id !== booking.id
           })
           this.$refs.fullcalendar.getApi().refetchEvents()
+          this.selectedBooking = null
           this.closeBookingModal()
 
           // this.deleteMessage = 'Din bokning är raderad!'
+
           // setTimeout(() => {
           //   this.deleteMessage = ''
-          //   this.openBookingModal = false
-          // }, 3000),
+          // }, 3000)
+          // this.closeBookingModal()
+          // this.openConfirmationModal = false
+
           console.log('Booking deleted successfully')
         } else {
           alert('Du kan inte radera någon annans bokning.')
@@ -364,8 +368,12 @@ export default {
         })
         this.$refs.fullcalendar.getApi().refetchEvents()
         this.closeBookingModal()
-        this.deleteMessage = 'Din bokning är raderad!'
-        console.log('Booking deleted successfully')
+        this.selectedBooking = null
+        console.log('HandleDeleteClickELSE', this.selectedBooking)
+
+        // this.openBookingInfoModal = false
+        // this.deleteMessage = 'Din bokning är raderad!'
+        // this.openConfirmationModal = false
       }
     },
 
@@ -426,28 +434,18 @@ export default {
     </div>
   </header>
   <div class="calender-container">
-    <div class="calendar-text flex justify-right flex-col mb-10">
+    <div class="calendar-text flex-col mb-10">
       <h2 class="text-2xl">
         Boka beachvolleyplan genom att klicka i kalendern eller välj datum här nedanför
       </h2>
-      <p>(Vid inloggning är dina bokningar gröna)</p>
+      <p class="mb-5">(Vid inloggning är dina bokningar gröna)</p>
 
       <button
         class="text-white bg-gradient-to-r from-pink-400 via-pink-500 to-pink-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-pink-300 dark:focus:ring-pink-800 font-medium rounded-lg text-sm w-32 px-3 py-2 text-center mb-2"
         @click="showModal"
       >
-        Boka tid
+        Välj datum
       </button>
-      <!-- <div class="modal-label">
-        <input
-          class="calender-date"
-          type="date"
-          id="booking-date"
-          v-model="bookingDate"
-          @change="highlightBookedTimes"
-          required
-        />
-      </div> -->
     </div>
 
     <div v-if="openBookingModal" class="modal">
@@ -455,7 +453,11 @@ export default {
         <span class="close" @click="closeBookingModal">&times;</span>
 
         <form @submit.prevent="">
-          <p>Bokningen får max vara 2 timmar lång</p>
+          <p>
+            <strong
+              >OBS: Bokningen får max vara 2 timmar lång och max 2 bokningar per person.</strong
+            >
+          </p>
 
           <div class="booking-container">
             <div class="modal-label">
@@ -586,6 +588,7 @@ export default {
         @edit="editBooking"
         @delete="handleDeleteClick"
         @close="closeBookingInfoModal"
+        @closeModal="openBookingInfoModal = false"
       />
     </div>
 
@@ -612,7 +615,7 @@ export default {
 }
 .header {
   position: relative;
-  background-image: url('../assets/side-view.jpg');
+  background-image: url('../assets/images/side-view.jpg');
   background-size: cover;
   background-position: center;
   height: 50vh;
@@ -629,13 +632,11 @@ export default {
 .calender-container {
   margin: 50px;
   margin-bottom: 50px;
-  /* background-color: rgb(255, 255, 255, 0.9); */
   border-radius: 0 0 20px 20px;
-  /* padding: 40px; */
 }
 
 .calendar-text {
-  margin-left: 220px;
+  text-align: center;
 }
 
 .calender-date {
@@ -761,7 +762,6 @@ export default {
   }
 }
 
-/* Anpassningar för mobiltelefoner */
 @media (max-width: 768px) {
   .custom-calendar {
     max-width: 100%;
@@ -781,7 +781,6 @@ export default {
   }
 }
 
-/* Anpassningar för mycket små skärmar */
 @media (max-width: 480px) {
   .custom-calendar {
     height: 400px;

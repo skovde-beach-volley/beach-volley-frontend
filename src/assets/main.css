@@ -8,11 +8,6 @@
 @tailwind utilities;
 
 @font-face {
-  /* font-family: 'plus-sans';
-  src:
-    url('@/assets/fonts/Plus_Jakarta_Sans') format('woff2'),
-    url('@/assets/fonts/mitt-anpassade-typsnitt.woff') format('woff'); */
-
   font-family: 'quicksand';
   src: url('../assets/fonts/Plus_Jakarta_Sans\,Quicksand/') format('truetype');
 }
@@ -32,7 +27,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Oswald:wght@700&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Lobster&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Pacifico&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;500&display=swap');
 
 .example-text {
   font-family: 'Oswald', sans-serif;
@@ -50,13 +44,8 @@ body {
   min-width: 900px;
   min-height: 900px;
   background-color: #faf2e9;
-
-  /* background: url(../assets/longblue.png); */
-  /* background-size: cover; */
   width: auto;
-  /* background-color: #f5f5f5; */
   color: #2c3e50;
-
   font-weight: normal;
 }
 
@@ -70,21 +59,9 @@ h6 {
   color: #2c3e50;
 }
 
-/* p {
-  color: #f5f5f5;
-} */
-
 main {
   min-height: 900px;
-  /* min-height: 1500px; */
-  /* height: fit-content; */
 }
-
-/* html,
-body {
-  height: 100%;
-  margin: 0;
-} */
 
 #app {
   display: flex;
@@ -101,7 +78,6 @@ a,
   text-decoration: none;
   color: #232528;
   transition: 0.4s;
-  /* padding: 3px; */
 }
 
 @media (hover: hover) {
@@ -109,16 +85,3 @@ a,
     background-color: hsla(160, 100%, 37%, 0.2);
   }
 }
-
-/* @media (min-width: 1024px) {
-  body {
-    display: flex;
-    place-items: center;
-  } */
-
-/* #app {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    padding: 0 2rem;
-  } */
-/* } */

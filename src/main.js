@@ -3,19 +3,24 @@ import { createPinia } from 'pinia'
 import piniaPluginPersistedstate from 'pinia-plugin-persistedstate'
 import App from './App.vue'
 import router from './router.js'
-import './assets/main.css' // Ensure your CSS files are correctly imported
-import './tailwind.css' // Import Tailwind CSS
-import 'flowbite' // Import Flowbite
+import './assets/main.css' // Se till att dina CSS-filer är korrekt importerade
+import './tailwind.css' // Importera Tailwind CSS
+import 'flowbite' // Importera Flowbite
+import AOS from 'aos'
+import 'aos/dist/aos.css'
 
 const app = createApp(App)
 const pinia = createPinia()
 
-// Use the persisted state plugin with Pinia
+// Använd plugin för persistenta tillstånd med Pinia
 pinia.use(piniaPluginPersistedstate)
 
-// Use the router and pinia with your Vue application
+// Använd router och pinia med din Vue-applikation
 app.use(router)
 app.use(pinia)
 
-// Mount the Vue application to the DOM
+// Initiera AOS när appen monteras
 app.mount('#app')
+
+app.config.globalProperties.$AOS = AOS
+AOS.init()

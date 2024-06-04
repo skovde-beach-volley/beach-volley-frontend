@@ -2,9 +2,9 @@
 import PageHeader from '../components/PageHeader.vue'
 import Cards from '../components/Cards.vue'
 
-import image1 from '../assets/front-view-female.jpg'
-import image2 from '../assets/group.jpg'
-import image3 from '../assets/playing.jpg'
+import image1 from '../assets/images/front-view-female.jpg'
+import image2 from '../assets/images/group.jpg'
+import image3 from '../assets/images/playing.jpg'
 
 export default {
   components: {
@@ -39,13 +39,8 @@ export default {
   <div class="background">
     <PageHeader />
     <div class="content-container flex items-center justify-center">
-      <!-- <img class="splash" src="../assets/splash.png" alt="img" /> -->
-
-      <div data-aos="fade-up">
-        <p class="page-header text-center">VI VÄLKOMNAR SPELARE I ALLA ÅLDRAR OCH PÅ ALLA NIVÅER</p>
-      </div>
+      <p class="page-header text-center">VI VÄLKOMNAR SPELARE I ALLA ÅLDRAR OCH PÅ ALLA NIVÅER</p>
     </div>
-    <hr class="line-container" />
     <div>
       <Cards :cards="cards" />
     </div>
@@ -53,8 +48,11 @@ export default {
 </template>
 
 <style scoped>
+.text-animation {
+  width: 70%;
+}
 .background {
-  background: url(../assets/longblue.png);
+  background: url(../assets/images/longblue.png);
   background-size: cover;
 }
 .content-container {
@@ -62,53 +60,41 @@ export default {
   display: flex;
   align-items: center;
   justify-content: center;
-  /* height: 300px;  */
   margin-top: 200px;
   margin-bottom: 200px;
-  /* margin: 70px; */
-  background: url(../assets/longblue.png);
-  background-size: cover;
 }
 
 .page-header {
-  font-size: 3rem; /* Adjust font size */
-  color: #c143ae; /* Adjust text color */
+  font-size: 3rem;
+  color: #c143ae;
   position: absolute;
   z-index: 2;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
   text-align: center;
-  padding: 10px; /* Add padding for better readability */
+  padding: 10px;
   font-family: 'Oswald', sans-serif;
   font-weight: 700;
-  letter-spacing: 0.05em; /* Adjust letter spacing */
-}
-
-.line-container {
-  border: 0;
-  height: 2px; /* Set line height */
-  background-color: #c143ae; /* Set line color */
-  margin: 20px auto; /* Add margins above and below the line */
-  width: 50%;
-  justify-content: center;
+  letter-spacing: 0.05em;
 }
 
 @media (max-width: 1200px) {
   .page-header {
-    width: 70%; /* Adjust width for smaller screens */
+    font-size: 2.5rem;
   }
 }
 
 @media (max-width: 1000px) {
   .page-header {
-    width: 80%; /* Adjust width for smaller screens */
+    font-size: 2rem;
   }
 }
 
 @media (max-width: 800px) {
   .page-header {
-    width: 90%; /* Adjust width for smaller screens */
+    font-size: 1.5rem;
+    width: 100%;
     margin-top: 80px;
     margin-bottom: 80px;
   }
