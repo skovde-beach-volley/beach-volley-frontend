@@ -19,16 +19,16 @@
             <a href="#" class="hover:underline">Kontakt</a>
             <p class="hover:underline text-sm">skovdebeachvolley@gmail.com</p>
           </li>
-          <li class="me-4 md:me-6">
-            <a href="#" class="hover:underline">Följ oss</a>
-            <p class="hover:underline text-sm">Facebook</p>
-            <p class="hover:underline text-sm">Instagram</p>
+          <li class="follow-us me-4 md:me-6">
+            <!-- <a href="#" class="hover:underline">Följ oss</a> -->
+            <img src="../assets/facebook.png" class="mr-5 h-12 w-12" alt="Skovdebeachvolley" />
+            <img src="../assets/instagram.png" class="h-12 w-12" alt="Skovdebeachvolley" />
           </li>
         </ul>
       </div>
       <hr class="my-6 border-gray-200 sm:mx-auto dark:border-gray-700 lg:my-8" />
       <span class="block text-sm text-gray-500 sm:text-center dark:text-gray-400"
-        >© 2023
+        >© 2024
         <p class="hover:underline">Skövde beachvolley™</p>
         . All Rights Reserved.</span
       >
@@ -39,5 +39,10 @@
 <style scoped>
 ul {
   align-items: flex-start;
+}
+
+.follow-us {
+  display: flex;
+  flex-direction: row;
 }
 </style>

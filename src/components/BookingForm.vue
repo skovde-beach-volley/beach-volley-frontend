@@ -5,10 +5,12 @@ import timeGridPlugin from '@fullcalendar/timegrid'
 import interactionPlugin from '@fullcalendar/interaction'
 import { useLoggedInStore } from '@/stores/loggedIn'
 import { watch, computed } from 'vue'
+import BookingInfo from './BookingInfo.vue'
 
 export default {
   components: {
-    FullCalendar
+    FullCalendar,
+    BookingInfo
   },
   setup() {
     const loggedInStore = useLoggedInStore()
@@ -60,7 +62,9 @@ export default {
       bookingEmail: '',
       selectedBooking: null,
       isEditing: false,
+      showEditConfirmation: false,
       deleteMessage: '',
+      editMessage: '',
       confirmedBooking: '',
       bookingCounts: {},
       timeDisabledStates: [],
@@ -135,12 +139,13 @@ export default {
       if (this.timeDisabledStates[time]) return // Förhindra klick på röda knappar
       this.selectedStartTime = time
       this.selectStartTime(time, event)
+      event.target.style.backgroundColor = 'white'
     },
     handleEndClick(time, event) {
       if (this.timeDisabledStates[time]) return // Förhindra klick på röda knappar
-      event.target.style.backgroundColor = 'white'
       this.selectedEndTime = time
       this.selectEndTime(time, event)
+      event.target.style.backgroundColor = 'white'
     },
     showModal: function () {
       this.openBookingModal = true
@@ -151,6 +156,7 @@ export default {
       this.openBookingModal = false
       this.resetButtonStyles()
       this.resetEditBooking()
+      this.showEditConfirmation = false
     },
     resetButtonStyles() {
       this.selectedStartTime = ''
@@ -176,10 +182,10 @@ export default {
         if (booking.bookerEmail == username) {
           booking.backgroundColor = 'green'
           booking.color = 'green'
-          booking.textColor = 'green'
+          booking.textColor = 'white'
         } else {
-          booking.backgroundColor = 'red'
-          booking.color = 'red'
+          booking.backgroundColor = '#8bb8e2'
+          booking.color = '#8bb8e2'
           booking.textColor = 'white'
         }
       })
@@ -196,6 +202,14 @@ export default {
         this.highlightBookedTimes()
       }
     },
+
+    closeConfirmationModal() {
+      this.openConfirmationModal = false
+      this.editMessage = ''
+      this.confirmedBooking = ''
+      this.actionType = ''
+    },
+
     showConfirmedBooking() {
       this.confirmedBooking = 'Din bokning är bekräftad!'
       this.openConfirmationModal = true
@@ -203,6 +217,16 @@ export default {
         this.confirmedBooking = ''
         this.openConfirmationModal = false
       }, 3000)
+    },
+
+    showEditedBooking() {
+      this.editMessage = 'Din bokning är redigerad!'
+      this.showEditConfirmation = true
+      setTimeout(() => {
+        this.editMessage = ''
+        this.showEditConfirmation = false
+      }, 3000)
+      console.log('test', this.editMessage)
     },
     submitBooking() {
       if (!this.bookingName || !this.bookingEmail) {
@@ -229,7 +253,7 @@ export default {
       const conflictingBooking = this.calendarOptions.events.find((event) => {
         const eventStartTime = new Date(event.start)
         const eventEndTime = new Date(event.end)
-        return eventStartTime <= bookingEndTime && eventEndTime >= bookingStartTime
+        return eventStartTime < bookingEndTime && eventEndTime > bookingStartTime
       })
 
       if (conflictingBooking) {
@@ -277,9 +301,12 @@ export default {
           event.end = this.bookingDate + 'T' + this.bookingEndTime
           event.title = this.bookingName
           event.bookerEmail = this.bookingEmail
+          this.showEditConfirmation = true
         }
+
         localStorage.setItem('bookings', JSON.stringify(this.calendarOptions.events))
         this.closeBookingModal()
+        this.showEditedBooking()
       }
     },
     handleDateClick: function (arg) {
@@ -314,7 +341,12 @@ export default {
           })
           this.$refs.fullcalendar.getApi().refetchEvents()
           this.closeBookingModal()
-          this.deleteMessage = 'Din bokning är raderad'
+
+          // this.deleteMessage = 'Din bokning är raderad!'
+          // setTimeout(() => {
+          //   this.deleteMessage = ''
+          //   this.openBookingModal = false
+          // }, 3000),
           console.log('Booking deleted successfully')
         } else {
           alert('Du kan inte radera någon annans bokning.')
@@ -332,7 +364,7 @@ export default {
         })
         this.$refs.fullcalendar.getApi().refetchEvents()
         this.closeBookingModal()
-        this.deleteMessage = 'Din bokning är raderad'
+        this.deleteMessage = 'Din bokning är raderad!'
         console.log('Booking deleted successfully')
       }
     },
@@ -346,6 +378,7 @@ export default {
           this.isEditing = true
           this.openBookingModal = true
           this.highlightBookedTimes()
+          console.log('editMessage', this.editMessage)
         } else {
           alert('Du kan inte redigera någon annans bokning.')
         }
@@ -387,29 +420,48 @@ export default {
 </script>
 
 <template>
-  <div class="calender-container mt-36">
-    <div class="flex justify-center flex-col mb-10">
-      <h2 class="text-2xl">Välj en tid för att boka våra beachvolleybollplaner!</h2>
-      <p>Klicka på knappen eller direkt i kalendern för att boka.</p>
-      <p>(Vid inloggning är dina bokningar gröna)</p>
+  <header class="header">
+    <div class="header-content">
+      <h1 class="header-text">Boka beachvolleybollplan</h1>
     </div>
+  </header>
+  <div class="calender-container">
+    <div class="calendar-text flex justify-right flex-col mb-10">
+      <h2 class="text-2xl">
+        Boka beachvolleyplan genom att klicka i kalendern eller välj datum här nedanför
+      </h2>
+      <p>(Vid inloggning är dina bokningar gröna)</p>
 
-    <button
-      class="text-white bg-gradient-to-r from-pink-400 via-pink-500 to-pink-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-pink-300 dark:focus:ring-pink-800 font-medium rounded-lg text-sm w-32 px-3 py-2 text-center mb-2"
-      @click="showModal"
-    >
-      Boka tid
-    </button>
+      <button
+        class="text-white bg-gradient-to-r from-pink-400 via-pink-500 to-pink-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-pink-300 dark:focus:ring-pink-800 font-medium rounded-lg text-sm w-32 px-3 py-2 text-center mb-2"
+        @click="showModal"
+      >
+        Boka tid
+      </button>
+      <!-- <div class="modal-label">
+        <input
+          class="calender-date"
+          type="date"
+          id="booking-date"
+          v-model="bookingDate"
+          @change="highlightBookedTimes"
+          required
+        />
+      </div> -->
+    </div>
 
     <div v-if="openBookingModal" class="modal">
       <div class="modal-content">
         <span class="close" @click="closeBookingModal">&times;</span>
 
         <form @submit.prevent="">
+          <p>Bokningen får max vara 2 timmar lång</p>
+
           <div class="booking-container">
             <div class="modal-label">
               <label for="booking-date">Datum:</label>
               <input
+                class="calender-date"
                 type="date"
                 id="booking-date"
                 v-model="bookingDate"
@@ -424,10 +476,12 @@ export default {
                 <button
                   @mouseover="$event.target.style.backgroundColor = 'darkgreen'"
                   @mouseleave="
-                    $event.target.style.backgroundColor = timeDisabledStates[time] ? 'red' : 'green'
+                    $event.target.style.backgroundColor = timeDisabledStates[time]
+                      ? 'darkgrey'
+                      : 'green'
                   "
                   @click="handleStartClick(time, $event)"
-                  :style="{ backgroundColor: timeDisabledStates[time] ? 'red' : 'green' }"
+                  :style="{ backgroundColor: timeDisabledStates[time] ? 'darkgrey' : 'green' }"
                   :class="{ selectedBooking: selectedStartTime === time }"
                   class="time-button"
                   v-for="time in availableTimes"
@@ -445,14 +499,16 @@ export default {
                 <button
                   @mouseover="$event.target.style.backgroundColor = 'darkgreen'"
                   @mouseleave="
-                    $event.target.style.backgroundColor = timeDisabledStates[time] ? 'red' : 'green'
+                    $event.target.style.backgroundColor = timeDisabledStates[time]
+                      ? 'darkgrey'
+                      : 'green'
                   "
                   class="time-button"
                   :class="{ selectedBooking: selectedEndTime === time }"
                   v-for="time in availableTimes"
                   :key="time"
                   @click="handleEndClick(time, $event)"
-                  :style="{ backgroundColor: timeDisabledStates[time] ? 'red' : 'green' }"
+                  :style="{ backgroundColor: timeDisabledStates[time] ? 'darkgrey' : 'green' }"
                   :disabled="timeDisabledStates[time]"
                 >
                   {{ time }}
@@ -512,7 +568,7 @@ export default {
 
           <div v-else class="bookingtime-button">
             <button
-              class="text-white bg-gradient-to-r from-pink-400 via-pink-500 to-pink-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-pink-300 dark:focus:ring-pink-800 font-medium rounded-lg text-sm w-32 px-3 py-2 text-center mb-2"
+              class="text-white bg-gradient-to-r from-pink-400 via-pink-500 to-pink-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-pink-300 dark:focus:ring-pink-800 font-medium rounded-lg text-lg w-40 px-6 py-4 text-center mb-2"
               @click="submitBooking()"
             >
               Boka
@@ -521,35 +577,26 @@ export default {
         </form>
       </div>
     </div>
+
     <div v-if="openBookingInfoModal" class="modal">
-      <div class="modal-content">
-        <span class="close" @click="closeBookingInfoModal">&times;</span>
-        <div v-if="selectedBooking && !deleteMessage">
-          <p>Bokningens namn: {{ selectedBooking.title }}</p>
-          <p>Starttid: {{ selectedBooking.start.toLocaleString() }}</p>
-          <p>Sluttid: {{ selectedBooking.end.toLocaleString() }}</p>
-          <div class="buttons-container">
-            <button
-              class="text-white bg-gradient-to-r from-pink-400 via-pink-500 to-pink-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-pink-300 dark:focus:ring-pink-800 font-medium rounded-lg text-sm w-32 px-3 py-2 text-center mb-2 mr-10 mt-10"
-              @click="editBooking(selectedBooking)"
-            >
-              Redigera bokning
-            </button>
-            <button
-              class="text-white bg-gradient-to-r from-pink-400 via-pink-500 to-pink-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-pink-300 dark:focus:ring-pink-800 font-medium rounded-lg text-sm w-32 px-3 py-2 text-center mb-2 mt-10"
-              @click="handleDeleteClick(selectedBooking)"
-            >
-              Radera bokning
-            </button>
-          </div>
-        </div>
-        <div v-if="deleteMessage" class="confirmedMessage">{{ deleteMessage }}</div>
-      </div>
+      <BookingInfo
+        :selected-booking="selectedBooking"
+        :delete-message="deleteMessage"
+        :edit-message="editMessage"
+        @edit="editBooking"
+        @delete="handleDeleteClick"
+        @close="closeBookingInfoModal"
+      />
     </div>
 
     <FullCalendar ref="fullcalendar" :options="calendarOptions" class="custom-calendar" />
 
-    <!-- Confirmation Modal -->
+    <div v-if="showEditConfirmation" class="modal">
+      <div class="modal-content">
+        <span class="close" @click="closeConfirmationModal = false">&times;</span>
+        <div class="confirmedMessage">{{ editMessage }}</div>
+      </div>
+    </div>
     <div v-if="openConfirmationModal" class="modal">
       <div class="modal-content">
         <span class="close" @click="openConfirmationModal = false">&times;</span>
@@ -560,17 +607,44 @@ export default {
 </template>
 
 <style scoped>
-.calender-container {
-  margin-bottom: 50px;
-  background-color: rgb(255, 255, 255, 0.9);
-  border-radius: 0 0 20px 20px;
-  padding: 40px;
+.fc-day-pointer {
+  cursor: pointer;
+}
+.header {
+  position: relative;
+  background-image: url('../assets/side-view.jpg');
+  background-size: cover;
+  background-position: center;
+  height: 50vh;
+  width: 100%;
+  background-repeat: no-repeat;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
+.time-button[disabled] {
+  pointer-events: none;
+}
+.calender-container {
+  margin: 50px;
+  margin-bottom: 50px;
+  /* background-color: rgb(255, 255, 255, 0.9); */
+  border-radius: 0 0 20px 20px;
+  /* padding: 40px; */
+}
+
+.calendar-text {
+  margin-left: 220px;
+}
+
+.calender-date {
+  border-radius: 10px;
+}
 .custom-calendar {
-  max-width: 900px; /* Exempel på bredd */
-  margin: 0 auto; /* Centrerar kalendern */
-  height: 700px; /* Exempel på höjd */
+  max-width: 900px;
+  margin: 0 auto;
+  height: 700px;
 }
 
 .modal {
@@ -594,9 +668,10 @@ export default {
   background-color: #fefefe;
   margin: 15% auto;
   padding: 20px;
-  border: 1px solid #888;
-  width: 50%;
+  width: 80%;
   pointer-events: auto;
+  border-radius: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
 .close {
@@ -644,12 +719,12 @@ export default {
 }
 
 .selectedBooking {
-  background-color: darkgreen !important;
+  background-color: #e837b6 !important;
   color: white;
 }
 
 .confirmedMessage {
-  color: green;
+  color: black;
   font-size: 1.2em;
   text-align: center;
   margin-top: 20px;
@@ -657,11 +732,67 @@ export default {
 
 .buttons-container {
   display: flex;
-  justify-content: space-between;
+  /* justify-content: space-between; */
 }
 
 .bookingtime-button {
   display: flex;
   justify-content: center;
+}
+
+.fc .fc-prev-button .fc-icon,
+.fc .fc-next-button .fc-icon {
+  color: white !important;
+}
+
+.fc .fc-button:hover {
+  background-color: rgba(255, 255, 255, 0.1) !important;
+}
+
+.fc .fc-button {
+  background-color: transparent !important;
+  border: none;
+}
+
+@media (max-width: 1024px) {
+  .custom-calendar {
+    max-width: 100%;
+    height: 600px;
+  }
+}
+
+/* Anpassningar för mobiltelefoner */
+@media (max-width: 768px) {
+  .custom-calendar {
+    max-width: 100%;
+    height: 500px;
+  }
+
+  .booking-container {
+    flex-direction: column;
+  }
+
+  .modal-content {
+    width: 90%;
+  }
+
+  .time-button {
+    flex: 1 1 45%;
+  }
+}
+
+/* Anpassningar för mycket små skärmar */
+@media (max-width: 480px) {
+  .custom-calendar {
+    height: 400px;
+  }
+
+  .modal-content {
+    width: 95%;
+  }
+
+  .time-button {
+    flex: 1 1 100%;
+  }
 }
 </style>

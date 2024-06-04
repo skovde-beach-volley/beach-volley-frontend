@@ -1,28 +1,84 @@
+<script>
+import { useLoggedInStore } from '@/stores/loggedIn'
+import { computed, ref, onMounted, onUnmounted } from 'vue'
+
+export default {
+  name: 'NavBar',
+  setup() {
+    const loggedInStore = useLoggedInStore()
+    const isLoggedIn = computed(() => loggedInStore.isLoggedIn)
+    const menuOpen = ref(false)
+    const isScrolled = ref(false)
+
+    const logOut = () => {
+      loggedInStore.logOut()
+      console.log('utloggad')
+    }
+
+    const toggleMenu = () => {
+      menuOpen.value = !menuOpen.value
+    }
+
+    const handleScroll = () => {
+      isScrolled.value = window.scrollY > 0
+    }
+
+    onMounted(() => {
+      window.addEventListener('scroll', handleScroll)
+    })
+
+    onUnmounted(() => {
+      window.removeEventListener('scroll', handleScroll)
+    })
+
+    return {
+      isLoggedIn,
+      logOut,
+      menuOpen,
+      toggleMenu,
+      isScrolled
+    }
+  }
+}
+</script>
+
 <template>
-  <nav :class="{ scrolled: isScrolled }" class="fixed top-0 left-0 w-full z-20 bg-transparent">
+  <nav
+    :class="{ 'bg-dark': isScrolled, 'bg-transparent': !isScrolled }"
+    class="fixed top-0 left-0 w-full z-20 transition-colors duration-300"
+  >
     <div class="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
-      <a href="/" class="flex items-center space-x-3 rtl:space-x-reverse">
-        <img src="../assets/skovdebeachvolley_logo.png" class="h-20 w-20" alt="skovdebeach-logo" />
+      <a class="flex items-center space-x-3 rtl:space-x-reverse">
+        <RouterLink to="/">
+          <img
+            src="../assets/skovdebeachvolley_logo.png"
+            class="h-20 w-16"
+            alt="skovdebeach-logo"
+          />
+        </RouterLink>
       </a>
+
       <div class="flex md:order-2 space-x-3 md:space-x-0 rtl:space-x-reverse">
         <span>
-          <a
+          <RouterLink
             v-if="!isLoggedIn"
-            href="/login"
+            to="/login"
             class="block py-2 px-3 text-white bg-blue-700 rounded md:bg-transparent md:text-white md:p-0 md:dark:text-white"
             aria-current="page"
-            >Logga in</a
           >
-          <a
+            Logga in</RouterLink
+          >
+          <RouterLink
             v-else
             @click.prevent="logOut"
-            href="#"
+            to="#"
             class="block py-2 px-3 text-white bg-red-700 rounded md:bg-transparent md:text-white md:p-0 md:dark:text-white"
             aria-current="page"
-            >Logga ut</a
+            >Logga ut</RouterLink
           >
         </span>
         <button
+          @click="toggleMenu"
           data-collapse-toggle="navbar-sticky"
           type="button"
           class="inline-flex items-center p-2 w-10 h-10 justify-center text-sm text-gray-500 rounded-lg md:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600"
@@ -48,28 +104,40 @@
         </button>
       </div>
       <div
-        class="items-center justify-between hidden w-full md:flex md:w-auto md:order-1"
+        :class="{ hidden: !menuOpen, block: menuOpen }"
+        class="items-center justify-between w-full md:flex md:w-auto md:order-1"
         id="navbar-sticky"
       >
         <ul
-          class="flex flex-col p-4 md:p-0 mt-4 font-medium border border-gray-100 rounded-lg bg-gray-50 md:space-x-8 rtl:space-x-reverse md:flex-row md:mt-0 md:border-0 md:bg-transparent dark:bg-gray-800 md:dark:bg-transparent dark:border-gray-700"
+          :class="menuOpen ? 'bg-white text-black' : 'bg-gray-50 text-white'"
+          class="flex flex-col p-4 md:p-0 mt-4 font-medium border border-gray-100 rounded-lg md:space-x-8 rtl:space-x-reverse md:flex-row md:mt-0 md:border-0 md:bg-transparent dark:bg-gray-800 md:dark:bg-transparent dark:border-gray-700"
         >
           <li>
-            <a href="/about" class="nav-link block py-2 px-3 text-white md:p-0 md:dark:text-white"
-              >Om oss</a
+            <a
+              href="/about"
+              class="nav-link block py-2 px-3 md:p-0"
+              :class="{ 'text-black': menuOpen, 'text-white': !menuOpen }"
             >
+              Om oss
+            </a>
           </li>
           <li>
             <a
               href="/training"
-              class="nav-link block py-2 px-3 text-white md:p-0 md:dark:text-white"
-              >Träningsgrupper</a
+              class="nav-link block py-2 px-3 md:p-0"
+              :class="{ 'text-black': menuOpen, 'text-white': !menuOpen }"
             >
+              Träningsgrupper
+            </a>
           </li>
           <li>
-            <a href="/booking" class="nav-link block py-2 px-3 text-white md:p-0 md:dark:text-white"
-              >Boka bana</a
+            <a
+              href="/booking"
+              class="nav-link block py-2 px-3 md:p-0"
+              :class="{ 'text-black': menuOpen, 'text-white': !menuOpen }"
             >
+              Boka volleybollplan
+            </a>
           </li>
         </ul>
       </div>
@@ -77,67 +145,28 @@
   </nav>
 </template>
 
-<script>
-import { useLoggedInStore } from '@/stores/loggedIn'
-import { computed, onMounted, onUnmounted, ref } from 'vue'
-
-export default {
-  name: 'NavBar',
-  setup() {
-    const loggedInStore = useLoggedInStore()
-    const isLoggedIn = computed(() => loggedInStore.isLoggedIn)
-    const isScrolled = ref(false)
-
-    const logOut = () => {
-      loggedInStore.logOut()
-      console.log('utloggad')
-    }
-
-    const handleScroll = () => {
-      isScrolled.value = window.scrollY > 50
-    }
-
-    onMounted(() => {
-      window.addEventListener('scroll', handleScroll)
-    })
-
-    onUnmounted(() => {
-      window.removeEventListener('scroll', handleScroll)
-    })
-
-    return {
-      isLoggedIn,
-      logOut,
-      isScrolled
-    }
-  }
-}
-</script>
-
 <style>
-nav {
-  background-color: transparent; /* Transparent background */
-  transition: background-color 0.3s ease;
+nav.bg-dark {
+  background-color: rgba(0, 0, 0, 0.5); /* Mörk bakgrundsfärg */
 }
 
-nav.scrolled {
-  background-color: rgba(0, 0, 0, 0.5); /* Background color when scrolled */
+nav.bg-transparent {
+  background-color: transparent; /* Transparent bakgrund */
 }
 
 .nav-link {
   position: relative;
-  color: white; /* Always white text */
-  text-decoration: none; /* Remove underline */
+  text-decoration: none; /* Ta bort understrykning */
   transition: color 0.3s;
 }
 
 .nav-link:visited {
-  color: white; /* Ensure visited links stay white */
+  color: inherit; /* Se till att besökta länkar ärvs färg */
 }
 
 .nav-link:hover,
 .nav-link:focus {
-  color: white; /* White color on hover and focus */
+  color: inherit; /* Ärvs färg vid hover och focus */
 }
 
 .nav-link::after {
@@ -148,7 +177,7 @@ nav.scrolled {
   display: block;
   margin-top: 5px;
   right: 0;
-  background: white;
+  background: currentColor;
   transition: width 0.3s ease;
   -webkit-transition: width 0.3s ease;
 }
@@ -157,10 +186,10 @@ nav.scrolled {
 .nav-link:focus::after {
   width: 100%;
   left: 0;
-  background: white;
+  background: currentColor;
 }
 
 a:focus {
-  outline: none; /* Remove default focus outline */
+  outline: none; /* Ta bort standard focus outline */
 }
 </style>

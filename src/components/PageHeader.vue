@@ -7,12 +7,12 @@ export default {
 <template>
   <header class="header">
     <div class="header-content">
-      <h1 class="header-text">Skövde Beachvolley</h1>
-      <a href="/booking">
+      <h1 class="header-text p-10">Skövde Beachvolley</h1>
+      <a RouterLink to="/booking">
         <button
-          class="header-button text-white bg-gradient-to-r from-pink-400 via-pink-500 to-pink-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-pink-300 dark:focus:ring-pink-800 font-medium rounded-lg text-lg text-center mb-2"
+          class="button-font text-white bg-gradient-to-r from-pink-400 via-pink-500 to-pink-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-pink-300 dark:focus:ring-pink-800 font-medium rounded-lg text-2xl w-58 text-center p-5"
         >
-          Boka & spela Beachvolleyboll!
+          Boka beachvolleybollplan!
         </button>
       </a>
     </div>
@@ -29,7 +29,7 @@ export default {
   width: 100%;
   background-repeat: no-repeat;
   display: flex;
-  align-items: flex-end;
+  align-items: center;
   justify-content: center;
 }
 
@@ -51,11 +51,17 @@ export default {
   margin-bottom: 40px;
 }
 
+.button-font {
+  font-family: 'Pacifico', cursive;
+}
+
 .header h1 {
-  color: white;
-  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
-  font-size: 120px;
-  font-family: 'Great Vibes', cursive;
+  /* color: white; */
+  /* text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5); */
+  font-size: 80px;
+  color: #faf2e9;
+  font-family: 'Oswald', sans-serif;
+  font-weight: 700;
   margin: 0;
 }
 

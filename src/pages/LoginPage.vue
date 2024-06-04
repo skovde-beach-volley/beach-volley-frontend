@@ -1,38 +1,3 @@
-<template>
-  <div class="info-page shiny-background">
-    <div class="content">
-      <div class="text-section">
-        <h2 class="text-4xl mb-10 text-left">Logga in</h2>
-        <input class="login-input" type="text" v-model="username" placeholder="Användarnamn" />
-        <input class="login-input" type="password" v-model="password" placeholder="Lösenord" />
-        <div class="button-container">
-          <button
-            v-if="!isLoggedIn"
-            @click="login"
-            type="button"
-            class="text-white bg-gradient-to-r from-pink-400 via-pink-500 to-pink-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-pink-300 dark:focus:ring-pink-800 font-medium rounded-lg text-sm w-32 px-3 py-2 text-center mb-2"
-          >
-            Logga in
-          </button>
-
-          <button
-            v-else
-            class="text-white bg-gradient-to-r from-pink-400 via-pink-500 to-pink-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-pink-300 dark:focus:ring-pink-800 font-medium rounded-lg text-sm w-32 px-3 py-2 text-center mb-2"
-            @click="logout"
-          >
-            Logga ut
-          </button>
-        </div>
-        <div class="button-container">
-          <p class="error-message" v-if="errorMessage">{{ errorMessage }}</p>
-          <span v-if="isLoggedIn && username">{{ userMessage }}</span>
-          <p v-else>Du är nu utloggad</p>
-        </div>
-      </div>
-    </div>
-  </div>
-</template>
-
 <script>
 import { ref, computed } from 'vue'
 import { useLoggedInStore } from '@/stores/loggedIn'
@@ -80,16 +45,68 @@ export default {
 }
 </script>
 
+<template>
+  <header class="header">
+    <div class="header-content">
+      <h1 class="header-text">Logga in/Skapa konto</h1>
+    </div>
+  </header>
+  <div class="info-page shiny-background">
+    <div class="content">
+      <div class="text-section">
+        <h2 class="text-4xl mb-10 text-left">Logga in</h2>
+        <input class="login-input" type="text" v-model="username" placeholder="Användarnamn" />
+        <input class="login-input" type="password" v-model="password" placeholder="Lösenord" />
+        <div class="button-container">
+          <button
+            v-if="!isLoggedIn"
+            @click="login"
+            type="button"
+            class="text-white bg-gradient-to-r from-pink-400 via-pink-500 to-pink-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-pink-300 dark:focus:ring-pink-800 font-medium rounded-lg text-sm w-32 px-3 py-2 text-center mb-2"
+          >
+            Logga in
+          </button>
+
+          <button
+            v-else
+            class="text-white bg-gradient-to-r from-pink-400 via-pink-500 to-pink-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-pink-300 dark:focus:ring-pink-800 font-medium rounded-lg text-sm w-32 px-3 py-2 text-center mb-2"
+            @click="logout"
+          >
+            Logga ut
+          </button>
+        </div>
+        <div class="button-container">
+          <p class="error-message" v-if="errorMessage">{{ errorMessage }}</p>
+          <span v-if="isLoggedIn && username">{{ userMessage }}</span>
+          <p v-else>Du är nu utloggad</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</template>
+
 <style scoped>
+.header {
+  position: relative;
+  background-image: url('../assets/playing.jpg');
+  background-position: center; /* Centrera bilden */
+  background-size: cover;
+  background-position: center;
+  height: 50vh;
+  width: 100%;
+  background-repeat: no-repeat;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
 .info-page {
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 100vh; /* Full height for demonstration */
-  /* background: radial-gradient(circle, #8bb8e2, #ffffff, #8bb8e2); */
-  background-color: #8bb8e2;
+  height: 50vh;
+  /* background-color: #8bb8e2; */
   background-size: 400% 400%;
-  animation: shiny 3s forwards; /* Run once and then stop */
+  /* animation: shiny 3s forwards; */
   color: #333;
   text-align: center;
   padding: 20px;
@@ -97,26 +114,14 @@ export default {
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
-/* @keyframes shiny {
-  0% {
-    background-position: 50% 50%;
-  }
-  50% {
-    background-position: 100% 100%;
-  }
-  100% {
-    background-position: 50% 50%;
-  }
-} */
-
 .content {
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: stretch; /* Ensures children take up the full height */
-  background: white;
+  /* background: white;
   border-radius: 10px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); */
   overflow: hidden;
   width: 80%;
   max-width: 1200px;
