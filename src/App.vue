@@ -29,13 +29,6 @@ export default {
 </template>
 
 <style>
-/* .app-container {
-  display: flex;
-  flex-direction: column;
-  min-height: 100vh;
-  justify-content: center;
-} */
-
 body {
   margin: 0;
   padding: 0;
