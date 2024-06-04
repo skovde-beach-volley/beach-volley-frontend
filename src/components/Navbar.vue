@@ -3,7 +3,7 @@ import { useLoggedInStore } from '@/stores/loggedIn'
 import { computed, ref, onMounted, onUnmounted } from 'vue'
 
 export default {
-  name: 'NavBar',
+  name: 'Navbar',
   setup() {
     const loggedInStore = useLoggedInStore()
     const isLoggedIn = computed(() => loggedInStore.isLoggedIn)
@@ -113,31 +113,31 @@ export default {
           class="flex flex-col p-4 md:p-0 mt-4 font-medium border border-gray-100 rounded-lg md:space-x-8 rtl:space-x-reverse md:flex-row md:mt-0 md:border-0 md:bg-transparent dark:bg-gray-800 md:dark:bg-transparent dark:border-gray-700"
         >
           <li>
-            <a
-              href="/about"
+            <RouterLink
+              to="/about"
               class="nav-link block py-2 px-3 md:p-0"
               :class="{ 'text-black': menuOpen, 'text-white': !menuOpen }"
             >
               Om oss
-            </a>
+            </RouterLink>
           </li>
           <li>
-            <a
-              href="/training"
+            <RouterLink
+              to="/training"
               class="nav-link block py-2 px-3 md:p-0"
               :class="{ 'text-black': menuOpen, 'text-white': !menuOpen }"
             >
               Träningsgrupper
-            </a>
+            </RouterLink>
           </li>
           <li>
-            <a
-              href="/booking"
+            <RouterLink
+              to="/booking"
               class="nav-link block py-2 px-3 md:p-0"
               :class="{ 'text-black': menuOpen, 'text-white': !menuOpen }"
             >
               Boka volleybollplan
-            </a>
+            </RouterLink>
           </li>
         </ul>
       </div>
