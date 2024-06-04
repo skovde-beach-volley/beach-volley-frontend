@@ -45,7 +45,7 @@ export default {
         <p class="page-header text-center">VI VÄLKOMNAR SPELARE I ALLA ÅLDRAR OCH PÅ ALLA NIVÅER</p>
       </div>
     </div>
-    <hr class="line-container" />
+    <!-- <hr class="line-container" /> -->
     <div>
       <Cards :cards="cards" />
     </div>
