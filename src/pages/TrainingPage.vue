@@ -13,6 +13,10 @@ export default {
     <div class="content">
       <div class="text-section">
         <div>
+          <h2 class="text-2xl font-bold mb-2">Träningarna för den här sommarsäsongen är över! Välkommen tillbaka 2026!</h2>
+        </div>
+
+        <!--<div>
           <h2 class="text-2xl font-bold mb-2">Ungdom</h2>
           <p class="text-lg">Rekommenderad ålder 10-15 år. Inga förkunskaper krävs.</p>
           <p class="text-lg mb-10"><strong>Tider:</strong> Tisdag 17.30-19.00</p>
@@ -34,7 +38,7 @@ export default {
             Träningar pågår vecka 20-33 med semesteruppehåll v 29 & 30. Samtliga träningar är
             tränarledda och det finns 8 platser på varje bana.
           </p>
-        </div>
+        </div> -->
       </div>
     </div>
   </div>

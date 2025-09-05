@@ -41,6 +41,18 @@ export default {
     <div class="content-container flex items-center justify-center">
       <p class="page-header text-center">VI VÄLKOMNAR SPELARE I ALLA ÅLDRAR OCH PÅ ALLA NIVÅER</p>
     </div>
+    <div style="display:flex; justify-content: center; flex-direction: column; align-items: center" >
+    <p class="text-center">JUST NU ÄR VÅR HEMSIDA INTE HELT KLAR - VÅR FACEBOOKGRUPP ANVÄNDS SOM PRIMÄRA INFORMATIONSKÄLLA</p>
+    <a
+      href="https://www.facebook.com/groups/skovdebeachvolley"
+      target="_blank"
+      rel="noopener noreferrer"
+      style="text-decoration: bold; color:blue"
+    >
+      Länk till Skövdebeachvolley Facebookgrupp
+    </a>
+    </div>
+
     <div>
       <Cards :cards="cards" />
     </div>

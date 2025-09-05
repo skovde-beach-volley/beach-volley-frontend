@@ -431,181 +431,194 @@ export default {
   <header class="header">
     <div class="header-content">
       <h1 class="header-text">Boka beachvolleybollplan</h1>
+
     </div>
   </header>
   <div class="calender-container">
+
     <div class="calendar-text flex-col mb-10">
-      <h2 class="text-2xl">
-        Boka beachvolleyplan genom att klicka i kalendern eller välj datum här nedanför
-      </h2>
-      <p class="mb-5">(Vid inloggning är dina bokningar gröna)</p>
+      <h1 class="text-2xl">Bokningar sker via vår Facebookgrupp! Bli medlem, och skriv ett inlägg i gruppen. Max 2 timmar per bana/per person</h1>
+      <a
+        href="https://www.facebook.com/groups/skovdebeachvolley"
+        target="_blank"
+        rel="noopener noreferrer"
+        style="text-decoration: bold; color:blue"
 
-      <button
-        class="text-white bg-gradient-to-r from-pink-400 via-pink-500 to-pink-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-pink-300 dark:focus:ring-pink-800 font-medium rounded-lg text-sm w-32 px-3 py-2 text-center mb-2"
-        @click="showModal"
       >
-        Välj datum
-      </button>
+        Länk till Skövdebeachvolley Facebookgrupp
+      </a>
+
+<!--      <h2 class="text-2xl">-->
+<!--        Boka beachvolleyplan genom att klicka i kalendern eller välj datum här nedanför-->
+<!--      </h2>-->
+<!--      <p class="mb-5">(Vid inloggning är dina bokningar gröna)</p>-->
+
+<!--      <button-->
+<!--        class="text-white bg-gradient-to-r from-pink-400 via-pink-500 to-pink-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-pink-300 dark:focus:ring-pink-800 font-medium rounded-lg text-sm w-32 px-3 py-2 text-center mb-2"-->
+<!--        @click="showModal"-->
+<!--      >-->
+<!--        Välj datum-->
+<!--      </button>-->
     </div>
 
-    <div v-if="openBookingModal" class="modal">
-      <div class="modal-content">
-        <span class="close" @click="closeBookingModal">&times;</span>
+<!--    <div v-if="openBookingModal" class="modal">-->
+<!--      <div class="modal-content">-->
+<!--        <span class="close" @click="closeBookingModal">&times;</span>-->
 
-        <form @submit.prevent="">
-          <p>
-            <strong
-              >OBS: Bokningen får max vara 2 timmar lång och max 2 bokningar per person.</strong
-            >
-          </p>
+<!--        <form @submit.prevent="">-->
+<!--          <p>-->
+<!--            <strong-->
+<!--              >OBS: Bokningen får max vara 2 timmar lång och max 2 bokningar per person.</strong-->
+<!--            >-->
+<!--          </p>-->
 
-          <div class="booking-container">
-            <div class="modal-label">
-              <label for="booking-date">Datum:</label>
-              <input
-                class="calender-date"
-                type="date"
-                id="booking-date"
-                v-model="bookingDate"
-                @change="highlightBookedTimes"
-                required
-              />
-            </div>
+<!--          <div class="booking-container">-->
+<!--            <div class="modal-label">-->
+<!--              <label for="booking-date">Datum:</label>-->
+<!--              <input-->
+<!--                class="calender-date"-->
+<!--                type="date"-->
+<!--                id="booking-date"-->
+<!--                v-model="bookingDate"-->
+<!--                @change="highlightBookedTimes"-->
+<!--                required-->
+<!--              />-->
+<!--            </div>-->
 
-            <div class="modal-label">
-              <label for="booking-start-time">Startid:</label>
-              <div class="booking-buttons" id="booking-start-time">
-                <button
-                  @mouseover="$event.target.style.backgroundColor = 'darkgreen'"
-                  @mouseleave="
-                    $event.target.style.backgroundColor = timeDisabledStates[time]
-                      ? 'darkgrey'
-                      : 'green'
-                  "
-                  @click="handleStartClick(time, $event)"
-                  :style="{ backgroundColor: timeDisabledStates[time] ? 'darkgrey' : 'green' }"
-                  :class="{ selectedBooking: selectedStartTime === time }"
-                  class="time-button"
-                  v-for="time in availableTimes"
-                  :key="time"
-                  :disabled="timeDisabledStates[time]"
-                >
-                  {{ time }}
-                </button>
-              </div>
-            </div>
+<!--            <div class="modal-label">-->
+<!--              <label for="booking-start-time">Startid:</label>-->
+<!--              <div class="booking-buttons" id="booking-start-time">-->
+<!--                <button-->
+<!--                  @mouseover="$event.target.style.backgroundColor = 'darkgreen'"-->
+<!--                  @mouseleave="-->
+<!--                    $event.target.style.backgroundColor = timeDisabledStates[time]-->
+<!--                      ? 'darkgrey'-->
+<!--                      : 'green'-->
+<!--                  "-->
+<!--                  @click="handleStartClick(time, $event)"-->
+<!--                  :style="{ backgroundColor: timeDisabledStates[time] ? 'darkgrey' : 'green' }"-->
+<!--                  :class="{ selectedBooking: selectedStartTime === time }"-->
+<!--                  class="time-button"-->
+<!--                  v-for="time in availableTimes"-->
+<!--                  :key="time"-->
+<!--                  :disabled="timeDisabledStates[time]"-->
+<!--                >-->
+<!--                  {{ time }}-->
+<!--                </button>-->
+<!--              </div>-->
+<!--            </div>-->
 
-            <div class="modal-label">
-              <label for="booking-end-time">Sluttid:</label>
-              <div class="booking-buttons" id="booking-end-time">
-                <button
-                  @mouseover="$event.target.style.backgroundColor = 'darkgreen'"
-                  @mouseleave="
-                    $event.target.style.backgroundColor = timeDisabledStates[time]
-                      ? 'darkgrey'
-                      : 'green'
-                  "
-                  class="time-button"
-                  :class="{ selectedBooking: selectedEndTime === time }"
-                  v-for="time in availableTimes"
-                  :key="time"
-                  @click="handleEndClick(time, $event)"
-                  :style="{ backgroundColor: timeDisabledStates[time] ? 'darkgrey' : 'green' }"
-                  :disabled="timeDisabledStates[time]"
-                >
-                  {{ time }}
-                </button>
-              </div>
-            </div>
-          </div>
+<!--            <div class="modal-label">-->
+<!--              <label for="booking-end-time">Sluttid:</label>-->
+<!--              <div class="booking-buttons" id="booking-end-time">-->
+<!--                <button-->
+<!--                  @mouseover="$event.target.style.backgroundColor = 'darkgreen'"-->
+<!--                  @mouseleave="-->
+<!--                    $event.target.style.backgroundColor = timeDisabledStates[time]-->
+<!--                      ? 'darkgrey'-->
+<!--                      : 'green'-->
+<!--                  "-->
+<!--                  class="time-button"-->
+<!--                  :class="{ selectedBooking: selectedEndTime === time }"-->
+<!--                  v-for="time in availableTimes"-->
+<!--                  :key="time"-->
+<!--                  @click="handleEndClick(time, $event)"-->
+<!--                  :style="{ backgroundColor: timeDisabledStates[time] ? 'darkgrey' : 'green' }"-->
+<!--                  :disabled="timeDisabledStates[time]"-->
+<!--                >-->
+<!--                  {{ time }}-->
+<!--                </button>-->
+<!--              </div>-->
+<!--            </div>-->
+<!--          </div>-->
 
-          <div class="email-container">
-            <div class="modal-label">
-              <div class="grid gap-6 mb-6 md:grid-cols-2">
-                <div>
-                  <label
-                    for="first_name"
-                    class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-                    >Namn</label
-                  >
-                  <input
-                    type="text"
-                    id="booking-name"
-                    v-model="bookingName"
-                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                    placeholder="Namn"
-                    required
-                  />
-                </div>
-              </div>
-            </div>
-            <div class="modal-label">
-              <div class="grid gap-6 mb-6 md:grid-cols-2">
-                <div>
-                  <label
-                    for="email_adress"
-                    class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-                    >Mail-adress</label
-                  >
-                  <input
-                    type="text"
-                    id="booking-email"
-                    v-model="bookingEmail"
-                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                    placeholder="Email"
-                    required
-                  />
-                </div>
-              </div>
-            </div>
-          </div>
-          <div v-if="isEditing" class="bookingtime-button">
-            <button
-              class="text-white bg-gradient-to-r from-pink-400 via-pink-500 to-pink-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-pink-300 dark:focus:ring-pink-800 font-medium rounded-lg text-sm w-32 px-3 py-2 text-center mb-2"
-              @click="handleEditClick()"
-            >
-              Redigera bokning
-            </button>
-          </div>
+<!--          <div class="email-container">-->
+<!--            <div class="modal-label">-->
+<!--              <div class="grid gap-6 mb-6 md:grid-cols-2">-->
+<!--                <div>-->
+<!--                  <label-->
+<!--                    for="first_name"-->
+<!--                    class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"-->
+<!--                    >Namn</label-->
+<!--                  >-->
+<!--                  <input-->
+<!--                    type="text"-->
+<!--                    id="booking-name"-->
+<!--                    v-model="bookingName"-->
+<!--                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"-->
+<!--                    placeholder="Namn"-->
+<!--                    required-->
+<!--                  />-->
+<!--                </div>-->
+<!--              </div>-->
+<!--            </div>-->
+<!--            <div class="modal-label">-->
+<!--              <div class="grid gap-6 mb-6 md:grid-cols-2">-->
+<!--                <div>-->
+<!--                  <label-->
+<!--                    for="email_adress"-->
+<!--                    class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"-->
+<!--                    >Mail-adress</label-->
+<!--                  >-->
+<!--                  <input-->
+<!--                    type="text"-->
+<!--                    id="booking-email"-->
+<!--                    v-model="bookingEmail"-->
+<!--                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"-->
+<!--                    placeholder="Email"-->
+<!--                    required-->
+<!--                  />-->
+<!--                </div>-->
+<!--              </div>-->
+<!--            </div>-->
+<!--          </div>-->
+<!--          <div v-if="isEditing" class="bookingtime-button">-->
+<!--            <button-->
+<!--              class="text-white bg-gradient-to-r from-pink-400 via-pink-500 to-pink-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-pink-300 dark:focus:ring-pink-800 font-medium rounded-lg text-sm w-32 px-3 py-2 text-center mb-2"-->
+<!--              @click="handleEditClick()"-->
+<!--            >-->
+<!--              Redigera bokning-->
+<!--            </button>-->
+<!--          </div>-->
 
-          <div v-else class="bookingtime-button">
-            <button
-              class="text-white bg-gradient-to-r from-pink-400 via-pink-500 to-pink-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-pink-300 dark:focus:ring-pink-800 font-medium rounded-lg text-lg w-40 px-6 py-4 text-center mb-2"
-              @click="submitBooking()"
-            >
-              Boka
-            </button>
-          </div>
-        </form>
-      </div>
-    </div>
+<!--          <div v-else class="bookingtime-button">-->
+<!--            <button-->
+<!--              class="text-white bg-gradient-to-r from-pink-400 via-pink-500 to-pink-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-pink-300 dark:focus:ring-pink-800 font-medium rounded-lg text-lg w-40 px-6 py-4 text-center mb-2"-->
+<!--              @click="submitBooking()"-->
+<!--            >-->
+<!--              Boka-->
+<!--            </button>-->
+<!--          </div>-->
+<!--        </form>-->
+<!--      </div>-->
+<!--    </div>-->
 
-    <div v-if="openBookingInfoModal" class="modal">
-      <BookingInfo
-        :selected-booking="selectedBooking"
-        :delete-message="deleteMessage"
-        :edit-message="editMessage"
-        @edit="editBooking"
-        @delete="handleDeleteClick"
-        @close="closeBookingInfoModal"
-        @closeModal="openBookingInfoModal = false"
-      />
-    </div>
+<!--    <div v-if="openBookingInfoModal" class="modal">-->
+<!--      <BookingInfo-->
+<!--        :selected-booking="selectedBooking"-->
+<!--        :delete-message="deleteMessage"-->
+<!--        :edit-message="editMessage"-->
+<!--        @edit="editBooking"-->
+<!--        @delete="handleDeleteClick"-->
+<!--        @close="closeBookingInfoModal"-->
+<!--        @closeModal="openBookingInfoModal = false"-->
+<!--      />-->
+<!--    </div>-->
 
-    <FullCalendar ref="fullcalendar" :options="calendarOptions" class="custom-calendar" />
+<!--    <FullCalendar ref="fullcalendar" :options="calendarOptions" class="custom-calendar" />-->
 
-    <div v-if="showEditConfirmation" class="modal">
-      <div class="modal-content">
-        <span class="close" @click="closeConfirmationModal = false">&times;</span>
-        <div class="confirmedMessage">{{ editMessage }}</div>
-      </div>
-    </div>
-    <div v-if="openConfirmationModal" class="modal">
-      <div class="modal-content">
-        <span class="close" @click="openConfirmationModal = false">&times;</span>
-        <div class="confirmedMessage">{{ confirmedBooking }}</div>
-      </div>
-    </div>
+<!--    <div v-if="showEditConfirmation" class="modal">-->
+<!--      <div class="modal-content">-->
+<!--        <span class="close" @click="closeConfirmationModal = false">&times;</span>-->
+<!--        <div class="confirmedMessage">{{ editMessage }}</div>-->
+<!--      </div>-->
+<!--    </div>-->
+<!--    <div v-if="openConfirmationModal" class="modal">-->
+<!--      <div class="modal-content">-->
+<!--        <span class="close" @click="openConfirmationModal = false">&times;</span>-->
+<!--        <div class="confirmedMessage">{{ confirmedBooking }}</div>-->
+<!--      </div>-->
+<!--    </div>-->
   </div>
 </template>
 

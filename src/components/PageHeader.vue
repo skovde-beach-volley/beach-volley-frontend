@@ -10,13 +10,24 @@ export default {
       <div data-aos="fade-up">
         <h1 class="header-text p-10">Skövde Beachvolley</h1>
       </div>
-      <RouterLink to="/booking">
+      <!--<RouterLink to="/booking">
         <button
           class="button-font text-white bg-gradient-to-r from-pink-400 via-pink-500 to-pink-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-pink-300 dark:focus:ring-pink-800 font-medium rounded-lg text-2xl w-58 text-center p-5"
         >
           Boka beachvolleybollplan!
         </button>
-      </RouterLink>
+      </RouterLink>-->
+      <a
+        href="https://www.facebook.com/groups/skovdebeachvolley"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        <button
+          class=" text-white bg-gradient-to-r from-pink-400 via-pink-500 to-pink-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-pink-300 dark:focus:ring-pink-800 font-medium rounded-lg text-2xl w-58 text-center p-5"
+        >
+          Gå till facebook grupp
+        </button>
+      </a>
     </div>
   </header>
 </template>

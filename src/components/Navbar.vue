@@ -59,24 +59,24 @@ export default {
       </a>
 
       <div class="flex md:order-2 space-x-3 md:space-x-0 rtl:space-x-reverse">
-        <span>
-          <RouterLink
-            v-if="!isLoggedIn"
-            to="/login"
-            class="block py-2 px-3 text-white bg-blue-700 rounded md:bg-transparent md:text-white md:p-0 md:dark:text-white"
-            aria-current="page"
-          >
-            Logga in</RouterLink
-          >
-          <RouterLink
-            v-else
-            @click.prevent="logOut"
-            to="#"
-            class="block py-2 px-3 text-white bg-blue-700 rounded md:bg-transparent md:text-white md:p-0 md:dark:text-white"
-            aria-current="page"
-            >Logga ut</RouterLink
-          >
-        </span>
+<!--        <span>-->
+<!--          <RouterLink-->
+<!--            v-if="!isLoggedIn"-->
+<!--            to="/login"-->
+<!--            class="block py-2 px-3 text-white bg-blue-700 rounded md:bg-transparent md:text-white md:p-0 md:dark:text-white"-->
+<!--            aria-current="page"-->
+<!--          >-->
+<!--            Logga in</RouterLink-->
+<!--          >-->
+<!--          <RouterLink-->
+<!--            v-else-->
+<!--            @click.prevent="logOut"-->
+<!--            to="#"-->
+<!--            class="block py-2 px-3 text-white bg-blue-700 rounded md:bg-transparent md:text-white md:p-0 md:dark:text-white"-->
+<!--            aria-current="page"-->
+<!--            >Logga ut</RouterLink-->
+<!--          >-->
+<!--        </span>-->
         <button
           @click="toggleMenu"
           data-collapse-toggle="navbar-sticky"

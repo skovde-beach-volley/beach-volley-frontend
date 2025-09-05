@@ -8,5 +8,6 @@ export default {
 }
 </script>
 <template>
-  <booking-form></booking-form>
+  <booking-form>
+  </booking-form>
 </template>
